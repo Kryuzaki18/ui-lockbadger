@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 import { API_ROUTES } from '../constants/api-routes.constant';
-import { AuthUser } from '../types/auth';
+import { AuthUser } from '../types/auth.model';
 
 import { HttpService } from './http.service';
 
