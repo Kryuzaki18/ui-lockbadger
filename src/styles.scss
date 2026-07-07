@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #0f0a0a;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #f0e8e8;
+}
+
+/* Remove default button & input browser styles */
+button {
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}

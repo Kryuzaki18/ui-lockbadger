@@ -1,1 +1,112 @@
-<p>login.component works!</p>
+<section class="login-card" aria-labelledby="login-heading">
+
+  <header class="login-header">
+    <h2 id="login-heading" class="login-title">Welcome back</h2>
+    <p class="login-subtitle">Unlock your vault to continue</p>
+  </header>
+
+  <!-- Server-side error banner -->
+  @if (error$ | async; as errorMsg) {
+    <div class="alert alert--error" role="alert" aria-live="assertive">
+      <svg lucideShieldCheck [size]="16" class="alert__icon" aria-hidden="true"></svg>
+      {{ errorMsg }}
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="login-form">
+
+    <!-- Email -->
+    <div class="field" [class.field--invalid]="emailControl?.invalid && emailControl?.touched">
+      <label class="field__label" for="login-email">Email address</label>
+      <div class="field__input-wrap">
+        <svg lucideMail [size]="16" class="field__icon" aria-hidden="true"></svg>
+        <input
+          id="login-email"
+          type="email"
+          class="field__input"
+          formControlName="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          aria-describedby="email-error"
+          [attr.aria-invalid]="emailControl?.invalid && emailControl?.touched"
+        />
+      </div>
+      @if (emailControl?.errors?.['required'] && emailControl?.touched) {
+        <span id="email-error" class="field__error" role="alert">Email is required.</span>
+      } @else if (emailControl?.errors?.['email'] && emailControl?.touched) {
+        <span id="email-error" class="field__error" role="alert">Enter a valid email address.</span>
+      }
+    </div>
+
+    <!-- Password -->
+    <div class="field" [class.field--invalid]="passwordControl?.invalid && passwordControl?.touched">
+      <label class="field__label" for="login-password">Master password</label>
+      <div class="field__input-wrap">
+        <svg lucideLock [size]="16" class="field__icon" aria-hidden="true"></svg>
+        <input
+          id="login-password"
+          [type]="showPassword ? 'text' : 'password'"
+          class="field__input field__input--has-action"
+          formControlName="password"
+          placeholder="Enter your master password"
+          autocomplete="current-password"
+          aria-describedby="password-error"
+          [attr.aria-invalid]="passwordControl?.invalid && passwordControl?.touched"
+        />
+        <button
+          type="button"
+          class="field__toggle"
+          (click)="togglePassword()"
+          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          [attr.aria-pressed]="showPassword"
+        >
+          @if (showPassword) {
+            <svg lucideEyeOff [size]="18" aria-hidden="true"></svg>
+          } @else {
+            <svg lucideEye [size]="18" aria-hidden="true"></svg>
+          }
+        </button>
+      </div>
+      @if (passwordControl?.errors?.['required'] && passwordControl?.touched) {
+        <span id="password-error" class="field__error" role="alert">Password is required.</span>
+      } @else if (passwordControl?.errors?.['minlength'] && passwordControl?.touched) {
+        <span id="password-error" class="field__error" role="alert">Password must be at least 6 characters.</span>
+      }
+    </div>
+
+    <!-- Remember me + forgot -->
+    <div class="login-extras">
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="rememberMe" class="checkbox-input" />
+        <span class="checkbox-custom" aria-hidden="true"></span>
+        Remember me
+      </label>
+      <a href="#" class="forgot-link">Forgot password?</a>
+    </div>
+
+    <!-- Submit -->
+    <button
+      type="submit"
+      class="btn-primary"
+      [disabled]="(isLoading$ | async) === true"
+      [class.btn-primary--loading]="(isLoading$ | async) === true"
+    >
+      @if ((isLoading$ | async) === true) {
+        <span class="spinner" aria-hidden="true"></span>
+        Unlocking…
+      } @else {
+        <svg lucideLogIn [size]="18" aria-hidden="true"></svg>
+        Unlock Vault
+      }
+    </button>
+
+  </form>
+
+  <footer class="login-footer">
+    <p>
+      Don't have an account?
+      <a routerLink="/signup" class="signup-link">Create one free</a>
+    </p>
+  </footer>
+
+</section>

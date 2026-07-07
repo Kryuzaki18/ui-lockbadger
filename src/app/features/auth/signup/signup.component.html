@@ -1,1 +1,125 @@
-<p>signup.component works!</p>
+<section class="signup-card" aria-labelledby="signup-heading">
+
+  <header class="signup-header">
+    <h2 id="signup-heading" class="signup-title">Create your vault</h2>
+    <p class="signup-subtitle">One master password to protect them all</p>
+  </header>
+
+  @if (error$ | async; as errorMsg) {
+    <div class="alert alert--error" role="alert" aria-live="assertive">
+      <svg lucideShieldCheck [size]="16" class="alert__icon" aria-hidden="true"></svg>
+      {{ errorMsg }}
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="signup-form">
+
+    <!-- Email -->
+    <div class="field" [class.field--invalid]="emailControl?.invalid && emailControl?.touched">
+      <label class="field__label" for="signup-email">Email address</label>
+      <div class="field__input-wrap">
+        <svg lucideMail [size]="16" class="field__icon" aria-hidden="true"></svg>
+        <input
+          id="signup-email"
+          type="email"
+          class="field__input"
+          formControlName="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          [attr.aria-invalid]="emailControl?.invalid && emailControl?.touched"
+        />
+      </div>
+      @if (emailControl?.errors?.['required'] && emailControl?.touched) {
+        <span class="field__error" role="alert">Email is required.</span>
+      } @else if (emailControl?.errors?.['email'] && emailControl?.touched) {
+        <span class="field__error" role="alert">Enter a valid email address.</span>
+      }
+    </div>
+
+    <!-- Password -->
+    <div class="field" [class.field--invalid]="passwordControl?.invalid && passwordControl?.touched">
+      <label class="field__label" for="signup-password">Master password</label>
+      <div class="field__input-wrap">
+        <svg lucideLock [size]="16" class="field__icon" aria-hidden="true"></svg>
+        <input
+          id="signup-password"
+          [type]="showPassword ? 'text' : 'password'"
+          class="field__input field__input--has-action"
+          formControlName="password"
+          placeholder="Minimum 8 characters"
+          autocomplete="new-password"
+          [attr.aria-invalid]="passwordControl?.invalid && passwordControl?.touched"
+        />
+        <button type="button" class="field__toggle" (click)="togglePassword()"
+          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          [attr.aria-pressed]="showPassword">
+          @if (showPassword) {
+            <svg lucideEyeOff [size]="18" aria-hidden="true"></svg>
+          } @else {
+            <svg lucideEye [size]="18" aria-hidden="true"></svg>
+          }
+        </button>
+      </div>
+      @if (passwordControl?.errors?.['required'] && passwordControl?.touched) {
+        <span class="field__error" role="alert">Password is required.</span>
+      } @else if (passwordControl?.errors?.['minlength'] && passwordControl?.touched) {
+        <span class="field__error" role="alert">Password must be at least 8 characters.</span>
+      }
+    </div>
+
+    <!-- Confirm password -->
+    <div class="field" [class.field--invalid]="
+      (confirmControl?.touched || form.touched) &&
+      (confirmControl?.errors?.['required'] || form.errors?.['passwordMismatch'])">
+      <label class="field__label" for="signup-confirm">Confirm master password</label>
+      <div class="field__input-wrap">
+        <svg lucideKeyRound [size]="16" class="field__icon" aria-hidden="true"></svg>
+        <input
+          id="signup-confirm"
+          [type]="showConfirm ? 'text' : 'password'"
+          class="field__input field__input--has-action"
+          formControlName="confirmPassword"
+          placeholder="Repeat your master password"
+          autocomplete="new-password"
+        />
+        <button type="button" class="field__toggle" (click)="toggleConfirm()"
+          [attr.aria-label]="showConfirm ? 'Hide confirm password' : 'Show confirm password'"
+          [attr.aria-pressed]="showConfirm">
+          @if (showConfirm) {
+            <svg lucideEyeOff [size]="18" aria-hidden="true"></svg>
+          } @else {
+            <svg lucideEye [size]="18" aria-hidden="true"></svg>
+          }
+        </button>
+      </div>
+      @if (confirmControl?.errors?.['required'] && confirmControl?.touched) {
+        <span class="field__error" role="alert">Please confirm your password.</span>
+      } @else if (form.errors?.['passwordMismatch'] && confirmControl?.touched) {
+        <span class="field__error" role="alert">Passwords do not match.</span>
+      }
+    </div>
+
+    <button
+      type="submit"
+      class="btn-primary"
+      [disabled]="(isLoading$ | async) === true"
+    >
+      @if ((isLoading$ | async) === true) {
+        <span class="spinner" aria-hidden="true"></span>
+        Creating vault…
+      } @else {
+        <svg lucideUserPlus [size]="18" aria-hidden="true"></svg>
+        Create Vault
+      }
+    </button>
+
+  </form>
+
+  <footer class="signup-footer">
+    <p>
+      Already have an account?
+      <a routerLink="/login" class="login-link">Sign in</a>
+    </p>
+  </footer>
+
+</section>
