@@ -1,20 +1,11 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
-import {
-  LucideMail,
-  LucideLock,
-  LucideEye,
-  LucideEyeOff,
-  LucideUserPlus,
-  LucideKeyRound,
-  LucideShieldCheck,
-} from '@lucide/angular';
+import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideKeyRound, LucideUserPlus, LucideShieldCheck } from '@lucide/angular';
 
+import { AuthFormBase } from '../auth-form.base';
 import * as AuthActions from '../../../store/auth/auth.actions';
-import { selectAuthError, selectIsLoading } from '../../../store/auth/auth.selectors';
 
 @Component({
   selector: 'app-signup',
@@ -26,19 +17,15 @@ import { selectAuthError, selectIsLoading } from '../../../store/auth/auth.selec
     LucideLock,
     LucideEye,
     LucideEyeOff,
-    LucideUserPlus,
     LucideKeyRound,
+    LucideUserPlus,
     LucideShieldCheck,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
 })
-export class SignupComponent implements OnDestroy {
+export class SignupComponent extends AuthFormBase {
   private readonly fb = inject(FormBuilder);
-  private readonly store = inject(Store);
-
-  readonly isLoading$ = this.store.select(selectIsLoading);
-  readonly error$ = this.store.select(selectAuthError);
 
   showPassword = false;
   showConfirm = false;
@@ -52,18 +39,11 @@ export class SignupComponent implements OnDestroy {
     { validators: this.passwordsMatch },
   );
 
-  ngOnDestroy(): void {
-    this.store.dispatch(AuthActions.clearAuthError());
-  }
-
   private passwordsMatch(group: FormGroup) {
     const pw = group.get('password')?.value;
     const confirm = group.get('confirmPassword')?.value;
     return pw === confirm ? null : { passwordMismatch: true };
   }
-
-  togglePassword(): void { this.showPassword = !this.showPassword; }
-  toggleConfirm(): void { this.showConfirm = !this.showConfirm; }
 
   onSubmit(): void {
     if (this.form.invalid) {

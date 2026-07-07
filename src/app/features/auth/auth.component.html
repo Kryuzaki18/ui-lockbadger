@@ -1,34 +1,19 @@
 <div class="auth-shell">
-  <!-- Left panel: branding -->
-  <aside class="auth-brand">
-    <div class="brand-content">
-      <div class="brand-logo">
-        <svg lucideVault [size]="72" color="#e74c3c" aria-hidden="true"></svg>
+  <div class="auth-bg" aria-hidden="true"></div>
+
+  <main class="auth-center" role="main">
+    <div class="auth-panel">
+
+      <div class="auth-brand">
+        <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-brand__logo" />
+        <div class="auth-brand__text">
+          <span class="auth-brand__name">LockBadger</span>
+          <span class="auth-brand__tagline">Your secrets, locked tight.</span>
+        </div>
       </div>
-      <h1 class="brand-name">LockBadger</h1>
-      <p class="brand-tagline">Your secrets, locked tight.</p>
 
-      <ul class="brand-features" aria-label="Key features">
-        <li>
-          <svg lucideShieldCheck [size]="18" class="feature-icon" aria-hidden="true"></svg>
-          End-to-end encrypted vault
-        </li>
-        <li>
-          <svg lucideLockKeyhole [size]="18" class="feature-icon" aria-hidden="true"></svg>
-          Zero-knowledge architecture
-        </li>
-        <li>
-          <svg lucideZap [size]="18" class="feature-icon" aria-hidden="true"></svg>
-          Instant autofill everywhere
-        </li>
-      </ul>
-    </div>
-  </aside>
-
-  <!-- Right panel: routed form -->
-  <main class="auth-form-panel" role="main">
-    <div class="auth-form-wrapper">
       <router-outlet />
+
     </div>
   </main>
 </div>
