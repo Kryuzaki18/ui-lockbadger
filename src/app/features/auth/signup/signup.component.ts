@@ -1,11 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
 import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideKeyRound, LucideUserPlus, LucideShieldCheck } from '@lucide/angular';
 
-import { AuthFormBase } from '../auth-form.base';
 import * as AuthActions from '../../../store/auth/auth.actions';
+import { selectAuthError, selectIsLoading } from '../../../store/auth/auth.selectors';
 
 @Component({
   selector: 'app-signup',
@@ -24,8 +25,12 @@ import * as AuthActions from '../../../store/auth/auth.actions';
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
 })
-export class SignupComponent extends AuthFormBase {
+export class SignupComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);
+  private readonly store = inject(Store);
+
+  readonly isLoading$ = this.store.select(selectIsLoading);
+  readonly error$ = this.store.select(selectAuthError);
 
   showPassword = false;
   showConfirm = false;
@@ -38,6 +43,10 @@ export class SignupComponent extends AuthFormBase {
     },
     { validators: this.passwordsMatch },
   );
+
+  ngOnDestroy(): void {
+    this.store.dispatch(AuthActions.clearAuthError());
+  }
 
   private passwordsMatch(group: FormGroup) {
     const pw = group.get('password')?.value;

@@ -1,13 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideLogIn, LucideShieldCheck } from '@lucide/angular';
 
-import { AuthFormBase } from '../auth-form.base';
 import * as AuthActions from '../../../store/auth/auth.actions';
-import { selectIsAuthenticated } from '../../../store/auth/auth.selectors';
+import { selectAuthError, selectIsAuthenticated, selectIsLoading } from '../../../store/auth/auth.selectors';
 
 @Component({
   selector: 'app-login',
@@ -25,10 +25,14 @@ import { selectIsAuthenticated } from '../../../store/auth/auth.selectors';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent extends AuthFormBase implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
+  private readonly store = inject(Store);
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
+
+  readonly isLoading$ = this.store.select(selectIsLoading);
+  readonly error$ = this.store.select(selectAuthError);
 
   showPassword = false;
 
@@ -47,10 +51,10 @@ export class LoginComponent extends AuthFormBase implements OnInit {
       });
   }
 
-  override ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    super.ngOnDestroy();
+    this.store.dispatch(AuthActions.clearAuthError());
   }
 
   onSubmit(): void {
