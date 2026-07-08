@@ -1,19 +1,75 @@
 <div class="auth-shell">
   <div class="auth-bg" aria-hidden="true"></div>
 
-  <main class="auth-center" role="main">
-    <div class="auth-panel">
+  <div class="auth-layout">
 
-      <div class="auth-brand">
-        <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-brand__logo" />
-        <div class="auth-brand__text">
-          <span class="auth-brand__name">LockBadger</span>
-          <span class="auth-brand__tagline">Your secrets, locked tight.</span>
+    <aside class="auth-info" aria-label="LockBadger features">
+      <div class="auth-info__inner">
+
+        <div class="auth-info__brand">
+          <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-info__logo" />
+          <div>
+            <p class="auth-info__name">LockBadger</p>
+            <p class="auth-info__tagline">Your secrets, locked tight.</p>
+          </div>
         </div>
+
+        <div class="auth-info__headline">
+          <h1 class="auth-info__title">Store smarter.<br />Stay protected.</h1>
+          <p class="auth-info__desc">
+            LockBadger uses bcrypt to secure your master password and applies an additional encryption layer on every stored credential — so even if the database is compromised, your data stays unreadable.
+          </p>
+        </div>
+
+        <ul class="auth-features" aria-label="Key features">
+          <li class="auth-features__item">
+            <span class="auth-features__icon" aria-hidden="true">🔒</span>
+            <div>
+              <strong>bcrypt master password</strong>
+              <p>Your master password is hashed with bcrypt — it is never stored in plain text and cannot be reversed.</p>
+            </div>
+          </li>
+          <li class="auth-features__item">
+            <span class="auth-features__icon" aria-hidden="true">🛡️</span>
+            <div>
+              <strong>Double-encrypted credentials</strong>
+              <p>Every stored email, username and password gets an extra encryption pass on top of the vault — two locks, not one.</p>
+            </div>
+          </li>
+          <li class="auth-features__item">
+            <span class="auth-features__icon" aria-hidden="true">🗄️</span>
+            <div>
+              <strong>Breach-resistant storage</strong>
+              <p>Raw credentials are never written to the database. A stolen dump reveals nothing without your key.</p>
+            </div>
+          </li>
+          <li class="auth-features__item">
+            <span class="auth-features__icon" aria-hidden="true">🔑</span>
+            <div>
+              <strong>You hold the key</strong>
+              <p>Decryption happens on your end. No server ever sees your plaintext passwords.</p>
+            </div>
+          </li>
+        </ul>
+
       </div>
+    </aside>
 
-      <router-outlet />
+    <main class="auth-form-panel" role="main">
+      <div class="auth-panel">
 
-    </div>
-  </main>
+        <div class="auth-panel__brand">
+          <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-panel__logo" />
+          <div>
+            <p class="auth-panel__name">LockBadger</p>
+            <p class="auth-panel__tagline">Your secrets, locked tight.</p>
+          </div>
+        </div>
+
+        <router-outlet />
+
+      </div>
+    </main>
+
+  </div>
 </div>
