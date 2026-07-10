@@ -2,10 +2,8 @@
   <div class="auth-bg" aria-hidden="true"></div>
 
   <div class="auth-layout">
-
     <aside class="auth-info" aria-label="LockBadger features">
       <div class="auth-info__inner">
-
         <div class="auth-info__brand">
           <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-info__logo" />
           <div>
@@ -15,49 +13,29 @@
         </div>
 
         <div class="auth-info__headline">
-          <h1 class="auth-info__title">Store smarter.<br />Stay protected.</h1>
-          <p class="auth-info__desc">
-            LockBadger uses bcrypt to secure your master password and applies an additional encryption layer on every stored credential — so even if the database is compromised, your data stays unreadable.
-          </p>
+          <h1 class="auth-info__title">
+            {{ authText.headline.line1 }}<br />
+            {{ authText.headline.line2 }}
+          </h1>
+          <p class="auth-info__desc">{{ authText.headline.description }}</p>
         </div>
 
         <ul class="auth-features" aria-label="Key features">
-          <li class="auth-features__item">
-            <span class="auth-features__icon" aria-hidden="true">🔒</span>
-            <div>
-              <strong>bcrypt master password</strong>
-              <p>Your master password is hashed with bcrypt — it is never stored in plain text and cannot be reversed.</p>
-            </div>
-          </li>
-          <li class="auth-features__item">
-            <span class="auth-features__icon" aria-hidden="true">🛡️</span>
-            <div>
-              <strong>Double-encrypted credentials</strong>
-              <p>Every stored email, username and password gets an extra encryption pass on top of the vault — two locks, not one.</p>
-            </div>
-          </li>
-          <li class="auth-features__item">
-            <span class="auth-features__icon" aria-hidden="true">🗄️</span>
-            <div>
-              <strong>Breach-resistant storage</strong>
-              <p>Raw credentials are never written to the database. A stolen dump reveals nothing without your key.</p>
-            </div>
-          </li>
-          <li class="auth-features__item">
-            <span class="auth-features__icon" aria-hidden="true">🔑</span>
-            <div>
-              <strong>You hold the key</strong>
-              <p>Decryption happens on your end. No server ever sees your plaintext passwords.</p>
-            </div>
-          </li>
+          @for (feature of authText.features; track feature.title) {
+            <li class="auth-features__item">
+              <span class="auth-features__icon" aria-hidden="true">{{ feature.icon }}</span>
+              <div>
+                <strong>{{ feature.title }}</strong>
+                <p>{{ feature.description }}</p>
+              </div>
+            </li>
+          }
         </ul>
-
       </div>
     </aside>
 
     <main class="auth-form-panel" role="main">
       <div class="auth-panel">
-
         <div class="auth-panel__brand">
           <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-panel__logo" />
           <div>
@@ -67,9 +45,7 @@
         </div>
 
         <router-outlet />
-
       </div>
     </main>
-
   </div>
 </div>
