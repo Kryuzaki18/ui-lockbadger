@@ -1,23 +1,23 @@
-<section class="auth-card" aria-labelledby="login-heading">
+<section class="auth-card flex flex-col gap-6" aria-labelledby="login-heading">
 
-  <header class="auth-card__header">
+  <header class="auth-card__header flex flex-col gap-1">
     <h2 id="login-heading" class="auth-card__title">Welcome back</h2>
     <p class="auth-card__subtitle">Unlock your vault to continue</p>
   </header>
 
   @if (error$ | async; as errorMsg) {
-    <div class="alert alert--error" role="alert" aria-live="assertive">
-      <svg lucideShieldCheck [size]="16" class="alert__icon" aria-hidden="true"></svg>
+    <div class="alert alert--error flex items-center gap-2" role="alert" aria-live="assertive">
+      <svg lucideShieldCheck [size]="16" class="alert__icon shrink-0" aria-hidden="true"></svg>
       {{ errorMsg }}
     </div>
   }
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form flex flex-col gap-4">
 
-    <div class="field" [class.field--invalid]="emailControl?.invalid && emailControl?.touched">
+    <div class="field flex flex-col gap-[0.35rem]" [class.field--invalid]="emailControl?.invalid && emailControl?.touched">
       <label class="field__label" for="login-email">Email address</label>
-      <div class="field__input-wrap">
-        <svg lucideMail [size]="16" class="field__icon" aria-hidden="true"></svg>
+      <div class="field__input-wrap relative flex items-center">
+        <svg lucideMail [size]="16" class="field__icon absolute left-[0.85rem] flex items-center shrink-0 pointer-events-none" aria-hidden="true"></svg>
         <input
           id="login-email"
           type="email"
@@ -36,10 +36,10 @@
       }
     </div>
 
-    <div class="field" [class.field--invalid]="passwordControl?.invalid && passwordControl?.touched">
+    <div class="field flex flex-col gap-[0.35rem]" [class.field--invalid]="passwordControl?.invalid && passwordControl?.touched">
       <label class="field__label" for="login-password">Master password</label>
-      <div class="field__input-wrap">
-        <svg lucideLock [size]="16" class="field__icon" aria-hidden="true"></svg>
+      <div class="field__input-wrap relative flex items-center">
+        <svg lucideLock [size]="16" class="field__icon absolute left-[0.85rem] flex items-center shrink-0 pointer-events-none" aria-hidden="true"></svg>
         <input
           id="login-password"
           [type]="showPassword ? 'text' : 'password'"
@@ -52,7 +52,7 @@
         />
         <button
           type="button"
-          class="field__toggle"
+          class="field__toggle flex items-center"
           (click)="showPassword = !showPassword"
           [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
           [attr.aria-pressed]="showPassword"
@@ -71,18 +71,18 @@
       }
     </div>
 
-    <div class="login-extras">
-      <label class="checkbox-label">
+    <div class="login-extras flex items-center justify-between mt-[0.1rem]">
+      <label class="checkbox-label flex items-center gap-2">
         <input type="checkbox" formControlName="rememberMe" class="checkbox-input" />
-        <span class="checkbox-custom" aria-hidden="true"></span>
+        <span class="checkbox-custom shrink-0" aria-hidden="true"></span>
         Remember me
       </label>
       <a href="#" class="forgot-link">Forgot password?</a>
     </div>
 
-    <button type="submit" class="btn-primary" [disabled]="(isLoading$ | async) === true">
+    <button type="submit" class="btn-primary flex items-center justify-center gap-2" [disabled]="(isLoading$ | async) === true">
       @if ((isLoading$ | async) === true) {
-        <span class="spinner" aria-hidden="true"></span>
+        <span class="spinner shrink-0" aria-hidden="true"></span>
         Unlocking…
       } @else {
         <svg lucideLogIn [size]="18" aria-hidden="true"></svg>

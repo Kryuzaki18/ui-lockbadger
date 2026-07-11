@@ -2,17 +2,17 @@
   <div class="auth-bg" aria-hidden="true"></div>
 
   <div class="auth-layout">
-    <aside class="auth-info" aria-label="LockBadger features">
-      <div class="auth-info__inner">
-        <div class="auth-info__brand">
-          <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-info__logo" />
+    <aside class="auth-info flex items-center justify-center" aria-label="LockBadger features">
+      <div class="auth-info__inner flex flex-col gap-10 max-w-[480px]">
+        <div class="auth-info__brand flex items-center gap-[0.85rem]">
+          <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-info__logo shrink-0" />
           <div>
             <p class="auth-info__name">LockBadger</p>
             <p class="auth-info__tagline">Your secrets, locked tight.</p>
           </div>
         </div>
 
-        <div class="auth-info__headline">
+        <div class="auth-info__headline flex flex-col gap-[0.9rem]">
           <h1 class="auth-info__title">
             {{ authText.headline.line1 }}<br />
             {{ authText.headline.line2 }}
@@ -20,10 +20,10 @@
           <p class="auth-info__desc">{{ authText.headline.description }}</p>
         </div>
 
-        <ul class="auth-features" aria-label="Key features">
+        <ul class="auth-features flex flex-col gap-4" aria-label="Key features">
           @for (feature of authText.features; track feature.title) {
-            <li class="auth-features__item">
-              <span class="auth-features__icon" aria-hidden="true">{{ feature.icon }}</span>
+            <li class="auth-features__item flex items-start gap-4">
+              <span class="auth-features__icon shrink-0 mt-[0.05rem]" aria-hidden="true">{{ feature.icon }}</span>
               <div>
                 <strong>{{ feature.title }}</strong>
                 <p>{{ feature.description }}</p>
@@ -34,10 +34,10 @@
       </div>
     </aside>
 
-    <main class="auth-form-panel" role="main">
+    <main class="auth-form-panel flex items-center justify-center" role="main">
       <div class="auth-panel">
-        <div class="auth-panel__brand">
-          <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-panel__logo" />
+        <div class="auth-panel__brand hidden md:flex items-center gap-[0.85rem]">
+          <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-panel__logo shrink-0" />
           <div>
             <p class="auth-panel__name">LockBadger</p>
             <p class="auth-panel__tagline">Your secrets, locked tight.</p>
