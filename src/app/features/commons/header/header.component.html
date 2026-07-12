@@ -1,1 +1,40 @@
-<p>header.component works!</p>
+<header class="sticky top-0 z-20 flex items-center gap-4 border-b border-zinc-800/70 bg-zinc-950/90 px-4 py-4 backdrop-blur sm:px-6">
+  <button
+    type="button"
+    class="text-zinc-400 transition hover:text-zinc-100 md:hidden"
+    (click)="menuClick.emit()"
+    aria-label="Open menu"
+  >
+    <svg lucideMenu [size]="22" aria-hidden="true"></svg>
+  </button>
+
+  <h1 class="text-lg font-bold tracking-tight text-zinc-100">{{ title }}</h1>
+
+  <div class="ml-auto flex items-center gap-3">
+    <div class="relative hidden sm:block">
+      <svg lucideSearch [size]="15" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" aria-hidden="true"></svg>
+      <input
+        type="search"
+        placeholder="Search your vault…"
+        class="w-56 rounded-lg border border-zinc-800 bg-zinc-900/60 py-2 pl-9 pr-3 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-600 focus:ring-2 focus:ring-red-600/25 lg:w-72"
+      />
+    </div>
+
+    <button
+      type="button"
+      class="relative rounded-lg p-2 text-zinc-400 transition hover:bg-zinc-900 hover:text-zinc-100"
+      aria-label="Notifications"
+    >
+      <svg lucideBell [size]="19" aria-hidden="true"></svg>
+      <span class="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-red-500" aria-hidden="true"></span>
+    </button>
+
+    <button
+      type="button"
+      class="flex items-center gap-1.5 rounded-lg bg-red-600 px-3.5 py-2 text-sm font-semibold text-white shadow-md shadow-red-950/40 transition hover:bg-red-500"
+    >
+      <svg lucidePlus [size]="16" aria-hidden="true"></svg>
+      <span class="hidden sm:inline">New item</span>
+    </button>
+  </div>
+</header>

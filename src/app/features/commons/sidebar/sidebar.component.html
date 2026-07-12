@@ -1,1 +1,65 @@
-<p>sidebar.component works!</p>
+<div
+  class="fixed inset-y-0 left-0 z-40 flex w-64 -translate-x-full flex-col border-r border-zinc-800/70 bg-zinc-950 transition-transform duration-200 md:static md:translate-x-0"
+  [class.translate-x-0]="open"
+>
+  <div class="flex items-center justify-between gap-3 border-b border-zinc-800/70 px-5 py-5">
+    <div class="flex items-center gap-2.5">
+      <img src="logo-lockbadger.png" alt="LockBadger logo" class="h-8 w-8 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(239,68,68,0.45)]" />
+      <p class="text-base font-bold tracking-wide text-zinc-100">LockBadger</p>
+    </div>
+    <button
+      type="button"
+      class="text-zinc-500 transition hover:text-zinc-200 md:hidden"
+      (click)="closeSidebar.emit()"
+      aria-label="Close menu"
+    >
+      <svg lucideX [size]="20" aria-hidden="true"></svg>
+    </button>
+  </div>
+
+  <nav class="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-5" aria-label="Primary">
+    @for (item of navItems; track item.label) {
+      <button
+        type="button"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition"
+        [ngClass]="item.active ? 'bg-red-600 text-white' : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100'"
+      >
+        @switch (item.icon) {
+          @case ('dashboard') { <svg lucideLayoutDashboard [size]="18" class="shrink-0" aria-hidden="true"></svg> }
+          @case ('vault') { <svg lucideKeyRound [size]="18" class="shrink-0" aria-hidden="true"></svg> }
+          @case ('generator') { <svg lucideWand2 [size]="18" class="shrink-0" aria-hidden="true"></svg> }
+          @case ('reports') { <svg lucideGauge [size]="18" class="shrink-0" aria-hidden="true"></svg> }
+          @case ('settings') { <svg lucideSettings [size]="18" class="shrink-0" aria-hidden="true"></svg> }
+        }
+        <span class="flex-1">{{ item.label }}</span>
+        @if (!item.active) {
+          <span class="rounded-full bg-zinc-800 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-zinc-500">Soon</span>
+        }
+      </button>
+    }
+  </nav>
+
+  <div class="border-t border-zinc-800/70 p-4">
+    <div class="flex items-center gap-3 rounded-lg bg-zinc-900/60 p-3">
+      <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-600 text-sm font-semibold text-white">
+        {{ (user$ | async)?.email?.charAt(0)?.toUpperCase() }}
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-medium text-zinc-200">{{ (user$ | async)?.email }}</p>
+        <p class="text-xs text-zinc-500">Free plan</p>
+      </div>
+      <button
+        type="button"
+        class="shrink-0 text-zinc-500 transition hover:text-red-500"
+        (click)="onLogout()"
+        aria-label="Log out"
+      >
+        <svg lucideLogOut [size]="18" aria-hidden="true"></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (open) {
+  <div class="fixed inset-0 z-30 bg-black/60 md:hidden" (click)="closeSidebar.emit()" aria-hidden="true"></div>
+}
