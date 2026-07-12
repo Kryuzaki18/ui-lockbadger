@@ -23,7 +23,6 @@ import { selectAuthError, selectIsLoading } from '../../../store/auth/auth.selec
     LucideShieldCheck,
   ],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss',
 })
 export class SignupComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);

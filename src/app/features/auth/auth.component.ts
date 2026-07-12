@@ -6,7 +6,6 @@ import { AUTH_TEXT } from '../../core/constants/text.constant';
   selector: 'app-auth',
   imports: [RouterOutlet],
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss',
 })
 export class AuthComponent {
   public authText = AUTH_TEXT;

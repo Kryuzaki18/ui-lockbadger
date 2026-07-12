@@ -23,7 +23,6 @@ import { selectAuthError, selectIsAuthenticated, selectIsLoading } from '../../.
     LucideShieldCheck,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);

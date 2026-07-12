@@ -1,27 +1,29 @@
-<section class="auth-card flex flex-col gap-6" aria-labelledby="login-heading">
+<section class="flex w-full flex-col gap-6" aria-labelledby="login-heading">
 
-  <header class="auth-card__header flex flex-col gap-1">
-    <h2 id="login-heading" class="auth-card__title">Welcome back</h2>
-    <p class="auth-card__subtitle">Unlock your vault to continue</p>
+  <header class="flex flex-col gap-1">
+    <h2 id="login-heading" class="text-2xl font-bold tracking-tight text-zinc-100">Welcome back</h2>
+    <p class="text-sm text-zinc-500">Unlock your vault to continue</p>
   </header>
 
   @if (error$ | async; as errorMsg) {
-    <div class="alert alert--error flex items-center gap-2" role="alert" aria-live="assertive">
-      <svg lucideShieldCheck [size]="16" class="alert__icon shrink-0" aria-hidden="true"></svg>
+    <div class="flex items-center gap-2 rounded-lg border border-red-900/50 bg-red-950/40 px-3.5 py-2.5 text-sm font-medium text-red-300" role="alert" aria-live="assertive">
+      <svg lucideShieldCheck [size]="16" class="shrink-0" aria-hidden="true"></svg>
       {{ errorMsg }}
     </div>
   }
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form flex flex-col gap-4">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="flex flex-col gap-4">
 
-    <div class="field flex flex-col gap-[0.35rem]" [class.field--invalid]="emailControl?.invalid && emailControl?.touched">
-      <label class="field__label" for="login-email">Email address</label>
-      <div class="field__input-wrap relative flex items-center">
-        <svg lucideMail [size]="16" class="field__icon absolute left-[0.85rem] flex items-center shrink-0 pointer-events-none" aria-hidden="true"></svg>
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="login-email">Email address</label>
+      <div class="relative flex items-center">
+        <svg lucideMail [size]="16" class="pointer-events-none absolute left-3 shrink-0 text-zinc-500" aria-hidden="true"></svg>
         <input
           id="login-email"
           type="email"
-          class="field__input"
+          class="w-full rounded-lg border bg-zinc-900/60 py-3 pl-10 pr-4 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-600 focus:ring-2 focus:ring-red-600/25"
+          [class.border-red-500]="emailControl?.invalid && emailControl?.touched"
+          [class.border-zinc-700]="!(emailControl?.invalid && emailControl?.touched)"
           formControlName="email"
           placeholder="you@example.com"
           autocomplete="email"
@@ -30,20 +32,22 @@
         />
       </div>
       @if (emailControl?.errors?.['required'] && emailControl?.touched) {
-        <span id="login-email-error" class="field__error" role="alert">Email is required.</span>
+        <span id="login-email-error" class="text-xs text-red-400" role="alert">Email is required.</span>
       } @else if (emailControl?.errors?.['email'] && emailControl?.touched) {
-        <span id="login-email-error" class="field__error" role="alert">Enter a valid email address.</span>
+        <span id="login-email-error" class="text-xs text-red-400" role="alert">Enter a valid email address.</span>
       }
     </div>
 
-    <div class="field flex flex-col gap-[0.35rem]" [class.field--invalid]="passwordControl?.invalid && passwordControl?.touched">
-      <label class="field__label" for="login-password">Master password</label>
-      <div class="field__input-wrap relative flex items-center">
-        <svg lucideLock [size]="16" class="field__icon absolute left-[0.85rem] flex items-center shrink-0 pointer-events-none" aria-hidden="true"></svg>
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="login-password">Master password</label>
+      <div class="relative flex items-center">
+        <svg lucideLock [size]="16" class="pointer-events-none absolute left-3 shrink-0 text-zinc-500" aria-hidden="true"></svg>
         <input
           id="login-password"
           [type]="showPassword ? 'text' : 'password'"
-          class="field__input field__input--has-action"
+          class="w-full rounded-lg border bg-zinc-900/60 py-3 pl-10 pr-11 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-600 focus:ring-2 focus:ring-red-600/25"
+          [class.border-red-500]="passwordControl?.invalid && passwordControl?.touched"
+          [class.border-zinc-700]="!(passwordControl?.invalid && passwordControl?.touched)"
           formControlName="password"
           placeholder="Enter your master password"
           autocomplete="current-password"
@@ -52,7 +56,7 @@
         />
         <button
           type="button"
-          class="field__toggle flex items-center"
+          class="absolute right-3 flex items-center text-zinc-500 transition hover:text-red-500 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-red-600"
           (click)="showPassword = !showPassword"
           [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
           [attr.aria-pressed]="showPassword"
@@ -65,24 +69,27 @@
         </button>
       </div>
       @if (passwordControl?.errors?.['required'] && passwordControl?.touched) {
-        <span id="login-password-error" class="field__error" role="alert">Password is required.</span>
+        <span id="login-password-error" class="text-xs text-red-400" role="alert">Password is required.</span>
       } @else if (passwordControl?.errors?.['minlength'] && passwordControl?.touched) {
-        <span id="login-password-error" class="field__error" role="alert">Password must be at least 6 characters.</span>
+        <span id="login-password-error" class="text-xs text-red-400" role="alert">Password must be at least 6 characters.</span>
       }
     </div>
 
-    <div class="login-extras flex items-center justify-between mt-[0.1rem]">
-      <label class="checkbox-label flex items-center gap-2">
-        <input type="checkbox" formControlName="rememberMe" class="checkbox-input" />
-        <span class="checkbox-custom shrink-0" aria-hidden="true"></span>
+    <div class="mt-0.5 flex items-center justify-between">
+      <label class="flex items-center gap-2 text-sm text-zinc-400">
+        <input type="checkbox" formControlName="rememberMe" class="h-4 w-4 rounded border-zinc-700 bg-zinc-900 accent-red-600" />
         Remember me
       </label>
-      <a href="#" class="forgot-link">Forgot password?</a>
+      <a href="#" class="text-sm text-red-500/80 transition hover:text-red-400 hover:underline">Forgot password?</a>
     </div>
 
-    <button type="submit" class="btn-primary flex items-center justify-center gap-2" [disabled]="(isLoading$ | async) === true">
+    <button
+      type="submit"
+      class="mt-1 flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 py-3 text-sm font-semibold text-white shadow-lg shadow-red-950/50 transition hover:bg-red-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+      [disabled]="(isLoading$ | async) === true"
+    >
       @if ((isLoading$ | async) === true) {
-        <span class="spinner shrink-0" aria-hidden="true"></span>
+        <span class="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-white/30 border-t-white" aria-hidden="true"></span>
         Unlocking…
       } @else {
         <svg lucideLogIn [size]="18" aria-hidden="true"></svg>
@@ -92,8 +99,8 @@
 
   </form>
 
-  <footer class="auth-card__footer">
-    <p>Don't have an account? <a routerLink="/signup" class="auth-card__footer-link">Create one free</a></p>
+  <footer class="border-t border-red-900/15 pt-4 text-center">
+    <p class="text-sm text-zinc-500">Don't have an account? <a routerLink="/signup" class="font-semibold text-red-500 transition hover:text-red-400 hover:underline">Create one free</a></p>
   </footer>
 
 </section>

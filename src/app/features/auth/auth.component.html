@@ -1,32 +1,33 @@
-<div class="auth-shell">
-  <div class="auth-bg" aria-hidden="true"></div>
+<div class="relative min-h-screen w-full overflow-hidden bg-zinc-950 text-zinc-100">
+  <div class="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-zinc-950/85" aria-hidden="true"></div>
 
-  <div class="auth-layout">
-    <aside class="auth-info flex items-center justify-center" aria-label="LockBadger features">
-      <div class="auth-info__inner flex flex-col gap-10 max-w-[480px]">
-        <div class="auth-info__brand flex items-center gap-[0.85rem]">
-          <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-info__logo shrink-0" />
+  <div class="relative z-10 grid min-h-screen grid-rows-[auto_1fr] md:grid-cols-[1fr_440px] md:grid-rows-1">
+    <aside class="flex items-center justify-center px-6 py-10 sm:px-10 md:py-12" aria-label="LockBadger features">
+      <div class="flex w-full max-w-lg flex-col gap-8">
+        <div class="flex items-center gap-3">
+          <img src="logo-lockbadger.png" alt="LockBadger logo" class="h-11 w-11 shrink-0 object-contain drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]" />
           <div>
-            <p class="auth-info__name">LockBadger</p>
-            <p class="auth-info__tagline">Your secrets, locked tight.</p>
+            <p class="text-lg font-bold tracking-wide text-zinc-100">LockBadger</p>
+            <p class="text-xs text-zinc-500">Your secrets, locked tight.</p>
           </div>
         </div>
 
-        <div class="auth-info__headline flex flex-col gap-[0.9rem]">
-          <h1 class="auth-info__title">
+        <div class="flex flex-col gap-3">
+          <h1 class="bg-gradient-to-br from-zinc-100 to-red-500 bg-clip-text text-3xl font-extrabold leading-tight tracking-tight text-transparent sm:text-4xl">
             {{ authText.headline.line1 }}<br />
             {{ authText.headline.line2 }}
           </h1>
-          <p class="auth-info__desc">{{ authText.headline.description }}</p>
+          <p class="hidden max-w-sm text-sm leading-relaxed text-zinc-400 sm:block">{{ authText.headline.description }}</p>
         </div>
 
-        <ul class="auth-features flex flex-col gap-4" aria-label="Key features">
+        <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:flex md:flex-col" aria-label="Key features">
           @for (feature of authText.features; track feature.title) {
-            <li class="auth-features__item flex items-start gap-4">
-              <span class="auth-features__icon shrink-0 mt-[0.05rem]" aria-hidden="true">{{ feature.icon }}</span>
+            <li class="flex items-start gap-3 rounded-xl border border-red-900/20 bg-white/[0.03] p-4 transition hover:border-red-900/40 hover:bg-white/[0.05]">
+              <span class="mt-0.5 shrink-0 text-xl" aria-hidden="true">{{ feature.icon }}</span>
               <div>
-                <strong>{{ feature.title }}</strong>
-                <p>{{ feature.description }}</p>
+                <strong class="block text-sm font-semibold text-red-200/80">{{ feature.title }}</strong>
+                <p class="mt-0.5 text-xs leading-relaxed text-zinc-500">{{ feature.description }}</p>
               </div>
             </li>
           }
@@ -34,13 +35,13 @@
       </div>
     </aside>
 
-    <main class="auth-form-panel flex items-center justify-center" role="main">
-      <div class="auth-panel">
-        <div class="auth-panel__brand hidden md:flex items-center gap-[0.85rem]">
-          <img src="logo-lockbadger.png" alt="LockBadger logo" class="auth-panel__logo shrink-0" />
+    <main class="flex items-center justify-center border-t border-red-900/10 bg-black/30 p-6 backdrop-blur-sm sm:p-10 md:border-l md:border-t-0" role="main">
+      <div class="w-full max-w-sm rounded-2xl border border-red-900/20 bg-zinc-900/70 p-7 shadow-2xl shadow-black/60 backdrop-blur-xl sm:p-9">
+        <div class="mb-7 hidden items-center gap-3 border-b border-red-900/20 pb-6 md:flex">
+          <img src="logo-lockbadger.png" alt="LockBadger logo" class="h-9 w-9 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(239,68,68,0.45)]" />
           <div>
-            <p class="auth-panel__name">LockBadger</p>
-            <p class="auth-panel__tagline">Your secrets, locked tight.</p>
+            <p class="text-base font-bold leading-none text-zinc-100">LockBadger</p>
+            <p class="mt-1 text-xs text-zinc-500">Your secrets, locked tight.</p>
           </div>
         </div>
 
