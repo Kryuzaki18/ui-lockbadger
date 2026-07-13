@@ -14,7 +14,7 @@ import {
 import { selectAuthUser } from '../../store/auth/auth.selectors';
 import { HeaderComponent } from '../commons/header/header.component';
 import { SidebarComponent } from '../commons/sidebar/sidebar.component';
-import { RECENT_VAULT_ITEMS, SECURITY_TIPS, VAULT_STATS } from './home.constants';
+import { RECENT_VAULT_ITEMS, SECURITY_TIPS, VAULT_STATS } from '../../core/constants/data.constants';
 
 @Component({
   selector: 'app-home',
