@@ -2,7 +2,7 @@
 
   <header class="flex flex-col gap-1">
     <h2 id="signup-heading" class="text-2xl font-bold tracking-tight text-zinc-100">Create your vault</h2>
-    <p class="text-sm text-zinc-500">One master password to protect them all</p>
+    <p class="text-sm text-zinc-500">One password to protect them all</p>
   </header>
 
   @if (error$ | async; as errorMsg) {
@@ -39,7 +39,7 @@
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="signup-password">Master password</label>
+      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="signup-password">password</label>
       <div class="relative flex items-center">
         <svg lucideLock [size]="16" class="pointer-events-none absolute left-3 shrink-0 text-zinc-500" aria-hidden="true"></svg>
         <input
@@ -76,7 +76,7 @@
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="signup-confirm">Confirm master password</label>
+      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="signup-confirm">Confirm password</label>
       <div class="relative flex items-center">
         <svg lucideKeyRound [size]="16" class="pointer-events-none absolute left-3 shrink-0 text-zinc-500" aria-hidden="true"></svg>
         <input
@@ -86,7 +86,7 @@
           [class.border-red-500]="confirmControl?.touched && (confirmControl?.errors?.['required'] || form.errors?.['passwordMismatch'])"
           [class.border-zinc-700]="!(confirmControl?.touched && (confirmControl?.errors?.['required'] || form.errors?.['passwordMismatch']))"
           formControlName="confirmPassword"
-          placeholder="Repeat your master password"
+          placeholder="Repeat your password"
           autocomplete="new-password"
           aria-describedby="signup-confirm-error"
         />

@@ -39,7 +39,7 @@
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="login-password">Master password</label>
+      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="login-password">password</label>
       <div class="relative flex items-center">
         <svg lucideLock [size]="16" class="pointer-events-none absolute left-3 shrink-0 text-zinc-500" aria-hidden="true"></svg>
         <input
@@ -49,7 +49,7 @@
           [class.border-red-500]="passwordControl?.invalid && passwordControl?.touched"
           [class.border-zinc-700]="!(passwordControl?.invalid && passwordControl?.touched)"
           formControlName="password"
-          placeholder="Enter your master password"
+          placeholder="Enter your password"
           autocomplete="current-password"
           aria-describedby="login-password-error"
           [attr.aria-invalid]="passwordControl?.invalid && passwordControl?.touched"

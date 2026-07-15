@@ -3,14 +3,14 @@ export const AUTH_TEXT = {
     line1: 'Store smarter.',
     line2: 'Stay protected.',
     description:
-      'LockBadger uses bcrypt to secure your master password and applies an additional encryption layer on every stored credential — so even if the database is compromised, your data stays unreadable.',
+      'LockBadger uses bcrypt to secure your password and applies an additional encryption layer on every stored credential — so even if the database is compromised, your data stays unreadable.',
   },
   features: [
     {
       icon: '🔒',
-      title: 'bcrypt master password',
+      title: 'bcrypt password',
       description:
-        'Your master password is hashed with bcrypt — it is never stored in plain text and cannot be reversed.',
+        'Your password is hashed with bcrypt — it is never stored in plain text and cannot be reversed.',
     },
     {
       icon: '🛡️',
