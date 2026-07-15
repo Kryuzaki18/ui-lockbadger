@@ -9,9 +9,15 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #0f0a0a;
+  background: #fafafa;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  color: #18181b;
+}
+
+html.dark,
+html.dark body {
+  background: #0f0a0a;
   color: #f0e8e8;
 }
 

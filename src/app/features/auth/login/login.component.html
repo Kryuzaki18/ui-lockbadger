@@ -1,7 +1,7 @@
 <section class="flex w-full flex-col gap-6" aria-labelledby="login-heading">
 
   <header class="flex flex-col gap-1">
-    <h2 id="login-heading" class="text-2xl font-bold tracking-tight text-zinc-100">Welcome back</h2>
+    <h2 id="login-heading" class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Welcome back</h2>
     <p class="text-sm text-zinc-500">Unlock your vault to continue</p>
   </header>
 
@@ -15,15 +15,16 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="flex flex-col gap-4">
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="login-email">Email address</label>
+      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-400" for="login-email">Email address</label>
       <div class="relative flex items-center">
         <svg lucideMail [size]="16" class="pointer-events-none absolute left-3 shrink-0 text-zinc-500" aria-hidden="true"></svg>
         <input
           id="login-email"
           type="email"
-          class="w-full rounded-lg border bg-zinc-900/60 py-3 pl-10 pr-4 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-600 focus:ring-2 focus:ring-red-600/25"
+          class="w-full rounded-lg border bg-white dark:bg-zinc-900/60 py-3 pl-10 pr-4 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus:border-red-600 focus:ring-2 focus:ring-red-600/25"
           [class.border-red-500]="emailControl?.invalid && emailControl?.touched"
-          [class.border-zinc-700]="!(emailControl?.invalid && emailControl?.touched)"
+          [class.border-zinc-300]="!(emailControl?.invalid && emailControl?.touched)"
+          [class.dark:border-zinc-700]="!(emailControl?.invalid && emailControl?.touched)"
           formControlName="email"
           placeholder="you@example.com"
           autocomplete="email"
@@ -39,15 +40,16 @@
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-400" for="login-password">password</label>
+      <label class="text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-400" for="login-password">password</label>
       <div class="relative flex items-center">
         <svg lucideLock [size]="16" class="pointer-events-none absolute left-3 shrink-0 text-zinc-500" aria-hidden="true"></svg>
         <input
           id="login-password"
           [type]="showPassword ? 'text' : 'password'"
-          class="w-full rounded-lg border bg-zinc-900/60 py-3 pl-10 pr-11 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-600 focus:ring-2 focus:ring-red-600/25"
+          class="w-full rounded-lg border bg-white dark:bg-zinc-900/60 py-3 pl-10 pr-11 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus:border-red-600 focus:ring-2 focus:ring-red-600/25"
           [class.border-red-500]="passwordControl?.invalid && passwordControl?.touched"
-          [class.border-zinc-700]="!(passwordControl?.invalid && passwordControl?.touched)"
+          [class.border-zinc-300]="!(passwordControl?.invalid && passwordControl?.touched)"
+          [class.dark:border-zinc-700]="!(passwordControl?.invalid && passwordControl?.touched)"
           formControlName="password"
           placeholder="Enter your password"
           autocomplete="current-password"
@@ -76,8 +78,8 @@
     </div>
 
     <div class="mt-0.5 flex items-center justify-between">
-      <label class="flex items-center gap-2 text-sm text-zinc-400">
-        <input type="checkbox" formControlName="rememberMe" class="h-4 w-4 rounded border-zinc-700 bg-zinc-900 accent-red-600" />
+      <label class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <input type="checkbox" formControlName="rememberMe" class="h-4 w-4 rounded border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 accent-red-600" />
         Remember me
       </label>
       <a routerLink="/forgot-password" class="text-sm text-red-500/80 transition hover:text-red-400 hover:underline">Forgot password?</a>

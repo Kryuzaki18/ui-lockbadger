@@ -1,15 +1,20 @@
-import { ElementRef, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { ElementRef, Component, EventEmitter, HostListener, Input, Output, inject } from '@angular/core';
 import {
   LucideBell,
   LucideCircleCheck,
   LucideClock,
   LucideKeyRound,
   LucideMenu,
+  LucideMoon,
   LucidePlus,
   LucideSearch,
   LucideShieldAlert,
+  LucideSun,
   LucideUserPlus,
 } from '@lucide/angular';
+
+import { STORAGE } from '../../../core/constants/storage.constant';
+import { LocalStorageService } from '../../../core/services/local-storage.service';
 
 interface Notification {
   id: number;
@@ -28,9 +33,11 @@ interface Notification {
     LucideClock,
     LucideKeyRound,
     LucideMenu,
+    LucideMoon,
     LucidePlus,
     LucideSearch,
     LucideShieldAlert,
+    LucideSun,
     LucideUserPlus,
   ],
   templateUrl: './header.component.html',
@@ -40,6 +47,10 @@ export class HeaderComponent {
   @Output() menuClick = new EventEmitter<void>();
 
   isNotifOpen = false;
+
+  private readonly localStorageService = inject(LocalStorageService);
+
+  readonly theme = this.localStorageService.getLocalStorageSignal<'light' | 'dark'>(STORAGE.theme, 'dark');
 
   readonly notifications: Notification[] = [
     {
@@ -84,6 +95,10 @@ export class HeaderComponent {
 
   toggleNotif(): void {
     this.isNotifOpen = !this.isNotifOpen;
+  }
+
+  toggleTheme(): void {
+    this.localStorageService.updateLocalStorageSignal(STORAGE.theme, this.theme() === 'dark' ? 'light' : 'dark');
   }
 
   closeNotif(): void {

@@ -6,13 +6,17 @@ import {
   LucideKeyRound,
   LucideLayoutDashboard,
   LucideLogOut,
+  LucideMoon,
   LucideSettings,
+  LucideSun,
   LucideWand2,
   LucideX,
 } from '@lucide/angular';
 
 import * as AuthActions from '../../../store/auth/auth.actions';
 import { selectAuthUser } from '../../../store/auth/auth.selectors';
+import { STORAGE } from '../../../core/constants/storage.constant';
+import { LocalStorageService } from '../../../core/services/local-storage.service';
 
 interface NavItem {
   label: string;
@@ -29,7 +33,9 @@ interface NavItem {
     LucideKeyRound,
     LucideLayoutDashboard,
     LucideLogOut,
+    LucideMoon,
     LucideSettings,
+    LucideSun,
     LucideWand2,
     LucideX,
   ],
@@ -37,11 +43,14 @@ interface NavItem {
 })
 export class SidebarComponent {
   private readonly store = inject(Store);
+  private readonly localStorageService = inject(LocalStorageService);
 
   @Input() open = false;
   @Output() closeSidebar = new EventEmitter<void>();
 
   readonly user$ = this.store.select(selectAuthUser);
+
+  readonly theme = this.localStorageService.getLocalStorageSignal<'light' | 'dark'>(STORAGE.theme, 'dark');
 
   readonly navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', active: true },
@@ -53,6 +62,10 @@ export class SidebarComponent {
 
   onLogout(): void {
     this.store.dispatch(AuthActions.logout());
+  }
+
+  toggleTheme(): void {
+    this.localStorageService.updateLocalStorageSignal(STORAGE.theme, this.theme() === 'dark' ? 'light' : 'dark');
   }
 
   getInitials(email: string | null | undefined): string {
