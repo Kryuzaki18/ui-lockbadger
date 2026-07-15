@@ -9,6 +9,11 @@ import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import * as authEffects from './store/auth/auth.effects';
 import { AUTH_FEATURE_KEY, authReducer } from './store/auth/auth.reducer';
+import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+
+registerLocaleData(en);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,5 +25,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideEffects(authEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: false }),
-  ]
+    provideNzI18n(en_US),
+  ],
 };
