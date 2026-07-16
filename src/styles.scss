@@ -4,20 +4,29 @@
   box-sizing: border-box;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  color: inherit;
+}
+
+p, ul, ol, dl {
+  margin: 0;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #fafafa;
+  background-color: #fafafa;
+  color: #18181b;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
-  color: #18181b;
 }
 
 html.dark,
 html.dark body {
-  background: #0f0a0a;
+  background-color: #0f0a0a;
   color: #f0e8e8;
 }
 
@@ -25,8 +34,42 @@ button, input {
   font-family: inherit;
 }
 
-// ng-zorro (antd) ships a light-only theme by default; these overrides keep
-// the handful of components used across the app legible on dark surfaces.
+
+.ant-menu.ant-menu-root {
+  background-color: transparent;
+  border-inline-end: none;
+}
+
+.ant-menu-inline .ant-menu-item {
+  width: auto;
+  height: auto;
+  margin: 0 0 4px;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  line-height: 1.25rem;
+}
+
+.ant-menu-item::after {
+  display: none;
+}
+
+.ant-btn-text {
+  color: rgb(82 82 91);
+}
+
+.ant-btn-text:not(:disabled):hover {
+  color: rgb(24 24 27);
+}
+
+.ant-badge {
+  color: inherit;
+}
+
+.ant-popover,
+.ant-popover-inner-content {
+  color: inherit;
+}
+
 html.dark {
   .ant-input,
   .ant-input-affix-wrapper {
@@ -92,8 +135,13 @@ html.dark {
     color: #f87171;
   }
 
+  .ant-btn-text {
+    color: rgb(161 161 170);
+  }
+
   .ant-btn-text:not(:disabled):hover {
     background-color: rgb(39 39 42);
+    color: rgb(244 244 245);
   }
 
   .ant-empty {
@@ -124,5 +172,31 @@ html.dark {
 
   .ant-result-subtitle {
     color: rgb(113 113 122);
+  }
+
+  .ant-menu-item {
+    color: rgb(161 161 170);
+  }
+
+  .ant-menu-item:hover {
+    background-color: rgb(24 24 27);
+    color: rgb(244 244 245);
+  }
+
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: rgb(127 29 29 / 30%);
+  }
+
+  .ant-menu-item-selected {
+    color: rgb(252 165 165);
+  }
+
+  .ant-popover-inner {
+    background-color: rgb(24 24 27);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 50%);
+  }
+
+  .ant-popover {
+    --antd-arrow-background-color: rgb(24 24 27);
   }
 }

@@ -1,120 +1,117 @@
 <header class="sticky top-0 z-20 flex items-center gap-4 border-b border-zinc-200 dark:border-zinc-800/70 bg-white/90 dark:bg-zinc-950/90 px-4 py-4 backdrop-blur sm:px-6">
   <button
-    type="button"
-    class="text-zinc-600 dark:text-zinc-400 transition hover:text-zinc-900 dark:hover:text-zinc-100 md:hidden"
+    nz-button
+    nzType="text"
+    nzShape="circle"
+    class="md:!hidden"
     (click)="menuClick.emit()"
     aria-label="Open menu"
   >
-    <svg lucideMenu [size]="22" aria-hidden="true"></svg>
+    <svg lucideMenu [size]="20" aria-hidden="true"></svg>
   </button>
 
   <h1 class="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">{{ title }}</h1>
 
   <div class="ml-auto flex items-center gap-3">
-    <div class="relative hidden sm:block">
-      <svg lucideSearch [size]="15" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" aria-hidden="true"></svg>
-      <input
-        type="search"
-        placeholder="Search your vault…"
-        class="w-56 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 py-2 pl-9 pr-3 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus:border-red-600 focus:ring-2 focus:ring-red-600/25 lg:w-72"
-      />
-    </div>
+    <nz-input-wrapper class="!hidden !w-56 sm:!flex lg:!w-72">
+      <svg nzInputPrefix lucideSearch [size]="15" class="text-zinc-500" aria-hidden="true"></svg>
+      <input type="search" nz-input placeholder="Search your vault…" aria-label="Search your vault" />
+    </nz-input-wrapper>
 
     <button
-      type="button"
-      class="rounded-lg p-2 text-zinc-600 dark:text-zinc-400 transition hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-100"
+      nz-button
+      nzType="text"
+      nzShape="circle"
+      nz-popover
+      [(nzPopoverVisible)]="isNotifOpen"
+      nzPopoverTrigger="click"
+      nzPopoverPlacement="bottomRight"
+      [nzPopoverContent]="notifPanel"
+      [nzPopoverOverlayStyle]="{ padding: '0' }"
+      aria-label="Notifications"
+      aria-haspopup="true"
+    >
+      <nz-badge nzStandalone [nzDot]="unreadCount > 0">
+        <svg lucideBell [size]="19" aria-hidden="true"></svg>
+      </nz-badge>
+    </button>
+
+    <ng-template #notifPanel>
+      <div class="w-80 overflow-hidden rounded-lg">
+        <div class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800/70 px-4 py-3">
+          <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Notifications</span>
+          <span class="text-xs text-zinc-500">{{ unreadCount }} unread</span>
+        </div>
+
+        <div class="max-h-80 divide-y divide-zinc-200 dark:divide-zinc-800/70 overflow-y-auto">
+          @for (notif of notifications; track notif.id) {
+            <div class="flex items-start gap-3 px-4 py-3 transition hover:bg-zinc-100 dark:hover:bg-zinc-900/70">
+              <span
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                [class.bg-red-50]="notif.icon === 'shield'"
+                [class.dark:bg-red-950/50]="notif.icon === 'shield'"
+                [class.text-red-600]="notif.icon === 'shield'"
+                [class.dark:text-red-400]="notif.icon === 'shield'"
+                [class.bg-zinc-200]="notif.icon !== 'shield'"
+                [class.dark:bg-zinc-800]="notif.icon !== 'shield'"
+                [class.text-zinc-700]="notif.icon !== 'shield'"
+                [class.dark:text-zinc-300]="notif.icon !== 'shield'"
+              >
+                @switch (notif.icon) {
+                  @case ('shield') {
+                    <svg lucideShieldAlert [size]="16" aria-hidden="true"></svg>
+                  }
+                  @case ('key') {
+                    <svg lucideKeyRound [size]="16" aria-hidden="true"></svg>
+                  }
+                  @case ('user') {
+                    <svg lucideUserPlus [size]="16" aria-hidden="true"></svg>
+                  }
+                  @case ('check') {
+                    <svg lucideCircleCheck [size]="16" aria-hidden="true"></svg>
+                  }
+                }
+              </span>
+
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between gap-2">
+                  <p class="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">{{ notif.title }}</p>
+                  @if (notif.unread) {
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-red-500" aria-hidden="true"></span>
+                  }
+                </div>
+                <p class="mt-0.5 line-clamp-2 text-xs text-zinc-500">{{ notif.message }}</p>
+                <p class="mt-1 flex items-center gap-1 text-[11px] text-zinc-400 dark:text-zinc-600">
+                  <svg lucideClock [size]="11" aria-hidden="true"></svg>
+                  {{ notif.time }}
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="border-t border-zinc-200 dark:border-zinc-800/70 px-4 py-2.5 text-center">
+          <button type="button" class="text-xs font-medium text-red-600 dark:text-red-400 transition hover:text-red-700 dark:hover:text-red-300">
+            View all notifications
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <button
+      nz-button
+      nzType="text"
+      nzShape="circle"
       [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
       (click)="toggleTheme()"
     >
-      @if (theme() === 'dark') {
-        <svg lucideSun [size]="19" aria-hidden="true"></svg>
-      } @else {
-        <svg lucideMoon [size]="19" aria-hidden="true"></svg>
-      }
-    </button>
-
-    <div class="relative">
-      <button
-        type="button"
-        class="relative rounded-lg p-2 text-zinc-600 dark:text-zinc-400 transition hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-100"
-        aria-label="Notifications"
-        (click)="toggleNotif()"
-      >
-        <svg lucideBell [size]="19" aria-hidden="true"></svg>
-        @if (unreadCount > 0) {
-          <span class="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-red-500" aria-hidden="true"></span>
+      <span class="flex items-center justify-center">
+        @if (theme() === 'dark') {
+          <svg lucideSun [size]="19" aria-hidden="true"></svg>
+        } @else {
+          <svg lucideMoon [size]="19" aria-hidden="true"></svg>
         }
-      </button>
-
-      @if (isNotifOpen) {
-        <div
-          class="absolute right-0 top-full z-30 mt-2 w-80 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800/70 bg-white/95 dark:bg-zinc-900/95 shadow-xl shadow-black/40 backdrop-blur"
-        >
-          <div class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800/70 px-4 py-3">
-            <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Notifications</span>
-            <span class="text-xs text-zinc-500">{{ unreadCount }} unread</span>
-          </div>
-
-          <div class="max-h-80 divide-y divide-zinc-200 dark:divide-zinc-800/70 overflow-y-auto">
-            @for (notif of notifications; track notif.id) {
-              <div class="flex items-start gap-3 px-4 py-3 transition hover:bg-zinc-100 dark:hover:bg-zinc-900/70">
-                <span
-                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                  [class.bg-red-950/50]="notif.icon === 'shield'"
-                  [class.text-red-400]="notif.icon === 'shield'"
-                  [class.bg-zinc-200]="notif.icon !== 'shield'"
-                  [class.dark:bg-zinc-800]="notif.icon !== 'shield'"
-                  [class.text-zinc-700]="notif.icon !== 'shield'"
-                  [class.dark:text-zinc-300]="notif.icon !== 'shield'"
-                >
-                  @switch (notif.icon) {
-                    @case ('shield') {
-                      <svg lucideShieldAlert [size]="16" aria-hidden="true"></svg>
-                    }
-                    @case ('key') {
-                      <svg lucideKeyRound [size]="16" aria-hidden="true"></svg>
-                    }
-                    @case ('user') {
-                      <svg lucideUserPlus [size]="16" aria-hidden="true"></svg>
-                    }
-                    @case ('check') {
-                      <svg lucideCircleCheck [size]="16" aria-hidden="true"></svg>
-                    }
-                  }
-                </span>
-
-                <div class="min-w-0 flex-1">
-                  <div class="flex items-center justify-between gap-2">
-                    <p class="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">{{ notif.title }}</p>
-                    @if (notif.unread) {
-                      <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-red-500" aria-hidden="true"></span>
-                    }
-                  </div>
-                  <p class="mt-0.5 line-clamp-2 text-xs text-zinc-500">{{ notif.message }}</p>
-                  <p class="mt-1 flex items-center gap-1 text-[11px] text-zinc-400 dark:text-zinc-600">
-                    <svg lucideClock [size]="11" aria-hidden="true"></svg>
-                    {{ notif.time }}
-                  </p>
-                </div>
-              </div>
-            }
-          </div>
-
-          <div class="border-t border-zinc-200 dark:border-zinc-800/70 px-4 py-2.5 text-center">
-            <button type="button" class="text-xs font-medium text-red-400 transition hover:text-red-300">
-              View all notifications
-            </button>
-          </div>
-        </div>
-      }
-    </div>
-
-    <button
-      type="button"
-      class="flex items-center gap-1.5 rounded-lg bg-red-600 px-3.5 py-2 text-sm font-semibold text-white shadow-md shadow-red-950/40 transition hover:bg-red-500"
-    >
-      <svg lucidePlus [size]="16" aria-hidden="true"></svg>
-      <span class="hidden sm:inline">New item</span>
+      </span>
     </button>
   </div>
 </header>

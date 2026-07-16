@@ -1,71 +1,71 @@
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   LucideGauge,
   LucideKeyRound,
   LucideLayoutDashboard,
   LucideLogOut,
-  LucideMoon,
   LucideSettings,
-  LucideSun,
   LucideWand2,
   LucideX,
 } from '@lucide/angular';
+import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzMenuDirective, NzMenuItemComponent } from 'ng-zorro-antd/menu';
+import { NzTagComponent } from 'ng-zorro-antd/tag';
+import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 
 import * as AuthActions from '../../../store/auth/auth.actions';
 import { selectAuthUser } from '../../../store/auth/auth.selectors';
-import { STORAGE } from '../../../core/constants/storage.constant';
-import { LocalStorageService } from '../../../core/services/local-storage.service';
 
 interface NavItem {
   label: string;
   icon: 'dashboard' | 'vault' | 'generator' | 'reports' | 'settings';
-  active: boolean;
+  route: string | null;
 }
 
 @Component({
   selector: 'app-sidebar',
   imports: [
     AsyncPipe,
-    NgClass,
     LucideGauge,
     LucideKeyRound,
     LucideLayoutDashboard,
     LucideLogOut,
-    LucideMoon,
     LucideSettings,
-    LucideSun,
     LucideWand2,
     LucideX,
+    NzAvatarComponent,
+    NzButtonComponent,
+    NzMenuDirective,
+    NzMenuItemComponent,
+    NzTagComponent,
+    NzTooltipDirective,
+    RouterLink,
+    RouterLinkActive,
   ],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
   private readonly store = inject(Store);
-  private readonly localStorageService = inject(LocalStorageService);
 
   @Input() open = false;
   @Output() closeSidebar = new EventEmitter<void>();
 
   readonly user$ = this.store.select(selectAuthUser);
 
-  readonly theme = this.localStorageService.getLocalStorageSignal<'light' | 'dark'>(STORAGE.theme, 'dark');
-
   readonly navItems: NavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', active: true },
-    { label: 'Vault', icon: 'vault', active: false },
-    { label: 'Generator', icon: 'generator', active: false },
-    { label: 'Reports', icon: 'reports', active: false },
-    { label: 'Settings', icon: 'settings', active: false },
+    { label: 'Dashboard', icon: 'dashboard', route: '/home' },
+    { label: 'Vault', icon: 'vault', route: '/vault' },
+    { label: 'Generator', icon: 'generator', route: null },
+    { label: 'Reports', icon: 'reports', route: null },
+    { label: 'Settings', icon: 'settings', route: null },
   ];
 
   onLogout(): void {
     this.store.dispatch(AuthActions.logout());
-  }
-
-  toggleTheme(): void {
-    this.localStorageService.updateLocalStorageSignal(STORAGE.theme, this.theme() === 'dark' ? 'light' : 'dark');
   }
 
   getInitials(email: string | null | undefined): string {

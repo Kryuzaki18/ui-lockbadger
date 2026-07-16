@@ -1,4 +1,4 @@
-import { ElementRef, Component, EventEmitter, HostListener, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import {
   LucideBell,
   LucideCircleCheck,
@@ -6,12 +6,15 @@ import {
   LucideKeyRound,
   LucideMenu,
   LucideMoon,
-  LucidePlus,
   LucideSearch,
   LucideShieldAlert,
   LucideSun,
   LucideUserPlus,
 } from '@lucide/angular';
+import { NzBadgeComponent } from 'ng-zorro-antd/badge';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzInputDirective, NzInputPrefixDirective, NzInputWrapperComponent } from 'ng-zorro-antd/input';
+import { NzPopoverDirective } from 'ng-zorro-antd/popover';
 
 import { STORAGE } from '../../../core/constants/storage.constant';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
@@ -34,11 +37,16 @@ interface Notification {
     LucideKeyRound,
     LucideMenu,
     LucideMoon,
-    LucidePlus,
     LucideSearch,
     LucideShieldAlert,
     LucideSun,
     LucideUserPlus,
+    NzBadgeComponent,
+    NzButtonComponent,
+    NzInputDirective,
+    NzInputPrefixDirective,
+    NzInputWrapperComponent,
+    NzPopoverDirective,
   ],
   templateUrl: './header.component.html',
 })
@@ -91,24 +99,7 @@ export class HeaderComponent {
     return this.notifications.filter((n) => n.unread).length;
   }
 
-  constructor(private readonly elementRef: ElementRef<HTMLElement>) {}
-
-  toggleNotif(): void {
-    this.isNotifOpen = !this.isNotifOpen;
-  }
-
   toggleTheme(): void {
     this.localStorageService.updateLocalStorageSignal(STORAGE.theme, this.theme() === 'dark' ? 'light' : 'dark');
-  }
-
-  closeNotif(): void {
-    this.isNotifOpen = false;
-  }
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    if (this.isNotifOpen && !this.elementRef.nativeElement.contains(event.target as Node)) {
-      this.isNotifOpen = false;
-    }
   }
 }

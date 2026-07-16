@@ -71,8 +71,7 @@ const STRENGTH_META: Record<VaultPasswordEntry['strength'], { label: string; per
     LucideStar,
     LucideTrash2,
   ],
-  templateUrl: './vault.component.html',
-  styleUrl: './vault.component.scss',
+  templateUrl: './vault.component.html'
 })
 export class VaultComponent {
   readonly categories = VAULT_CATEGORIES;
