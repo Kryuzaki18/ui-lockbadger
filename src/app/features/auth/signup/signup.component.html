@@ -28,9 +28,9 @@
         />
       </nz-input-wrapper>
       @if (emailControl?.errors?.['required'] && emailControl?.touched) {
-        <span id="signup-email-error" class="text-xs text-red-400" role="alert">Email is required.</span>
+        <span id="signup-email-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Email is required.</span>
       } @else if (emailControl?.errors?.['email'] && emailControl?.touched) {
-        <span id="signup-email-error" class="text-xs text-red-400" role="alert">Enter a valid email address.</span>
+        <span id="signup-email-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Enter a valid email address.</span>
       }
     </div>
 
@@ -65,9 +65,9 @@
         </button>
       </nz-input-wrapper>
       @if (passwordControl?.errors?.['required'] && passwordControl?.touched) {
-        <span id="signup-password-error" class="text-xs text-red-400" role="alert">Password is required.</span>
+        <span id="signup-password-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Password is required.</span>
       } @else if (passwordControl?.errors?.['minlength'] && passwordControl?.touched) {
-        <span id="signup-password-error" class="text-xs text-red-400" role="alert">Password must be at least 8 characters.</span>
+        <span id="signup-password-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Password must be at least 8 characters.</span>
       }
     </div>
 
@@ -101,9 +101,9 @@
         </button>
       </nz-input-wrapper>
       @if (confirmControl?.errors?.['required'] && confirmControl?.touched) {
-        <span id="signup-confirm-error" class="text-xs text-red-400" role="alert">Please confirm your password.</span>
+        <span id="signup-confirm-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Please confirm your password.</span>
       } @else if (form.errors?.['passwordMismatch'] && confirmControl?.touched) {
-        <span id="signup-confirm-error" class="text-xs text-red-400" role="alert">Passwords do not match.</span>
+        <span id="signup-confirm-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Passwords do not match.</span>
       }
     </div>
 
@@ -127,8 +127,8 @@
 
   </form>
 
-  <footer class="border-t border-red-900/15 pt-4 text-center">
-    <p class="text-sm text-zinc-500">Already have an account? <a routerLink="/login" class="font-semibold text-red-500 transition hover:text-red-400 hover:underline">Sign in</a></p>
+  <footer class="border-t border-red-200/60 dark:border-red-900/15 pt-4 text-center">
+    <p class="text-sm text-zinc-500">Already have an account? <a routerLink="/login" class="font-semibold text-red-600 dark:text-red-400 transition hover:text-red-700 dark:hover:text-red-300 hover:underline">Sign in</a></p>
   </footer>
 
 </section>

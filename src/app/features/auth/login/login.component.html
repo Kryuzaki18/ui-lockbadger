@@ -28,9 +28,9 @@
         />
       </nz-input-wrapper>
       @if (emailControl?.errors?.['required'] && emailControl?.touched) {
-        <span id="login-email-error" class="text-xs text-red-400" role="alert">Email is required.</span>
+        <span id="login-email-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Email is required.</span>
       } @else if (emailControl?.errors?.['email'] && emailControl?.touched) {
-        <span id="login-email-error" class="text-xs text-red-400" role="alert">Enter a valid email address.</span>
+        <span id="login-email-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Enter a valid email address.</span>
       }
     </div>
 
@@ -65,15 +65,15 @@
         </button>
       </nz-input-wrapper>
       @if (passwordControl?.errors?.['required'] && passwordControl?.touched) {
-        <span id="login-password-error" class="text-xs text-red-400" role="alert">Password is required.</span>
+        <span id="login-password-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Password is required.</span>
       } @else if (passwordControl?.errors?.['minlength'] && passwordControl?.touched) {
-        <span id="login-password-error" class="text-xs text-red-400" role="alert">Password must be at least 6 characters.</span>
+        <span id="login-password-error" class="text-xs text-red-600 dark:text-red-400" role="alert">Password must be at least 6 characters.</span>
       }
     </div>
 
     <div class="mt-0.5 flex items-center justify-between">
       <label nz-checkbox formControlName="rememberMe" class="!text-sm !text-zinc-600 dark:!text-zinc-400">Remember me</label>
-      <a routerLink="/forgot-password" class="text-sm text-red-500/80 transition hover:text-red-400 hover:underline">Forgot password?</a>
+      <a routerLink="/forgot-password" class="text-sm text-red-600 dark:text-red-400 transition hover:text-red-700 dark:hover:text-red-300 hover:underline">Forgot password?</a>
     </div>
 
     <button
@@ -96,8 +96,8 @@
 
   </form>
 
-  <footer class="border-t border-red-900/15 pt-4 text-center">
-    <p class="text-sm text-zinc-500">Don't have an account? <a routerLink="/signup" class="font-semibold text-red-500 transition hover:text-red-400 hover:underline">Create one free</a></p>
+  <footer class="border-t border-red-200/60 dark:border-red-900/15 pt-4 text-center">
+    <p class="text-sm text-zinc-500">Don't have an account? <a routerLink="/signup" class="font-semibold text-red-600 dark:text-red-400 transition hover:text-red-700 dark:hover:text-red-300 hover:underline">Create one free</a></p>
   </footer>
 
 </section>

@@ -23,11 +23,11 @@
 
         <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:flex md:flex-col" aria-label="Key features">
           @for (feature of authText.features; track feature.title) {
-            <li class="flex items-start gap-3 rounded-xl border border-red-900/20 bg-white/[0.03] p-4 transition hover:border-red-900/40 hover:bg-white/[0.05]">
+            <li class="flex items-start gap-3 rounded-xl border border-red-200/70 dark:border-red-900/20 bg-red-50/50 dark:bg-white/[0.03] p-4 transition hover:border-red-300 dark:hover:border-red-900/40 hover:bg-red-50 dark:hover:bg-white/[0.05]">
               <span class="mt-0.5 shrink-0 text-xl" aria-hidden="true">{{ feature.icon }}</span>
               <div>
-                <strong class="block text-sm font-semibold text-red-200/80">{{ feature.title }}</strong>
-                <p class="mt-0.5 text-xs leading-relaxed text-zinc-500">{{ feature.description }}</p>
+                <strong class="block text-sm font-semibold text-red-700 dark:text-red-200/80">{{ feature.title }}</strong>
+                <p class="mt-0.5 text-xs leading-relaxed text-zinc-600 dark:text-zinc-500">{{ feature.description }}</p>
               </div>
             </li>
           }
@@ -35,9 +35,9 @@
       </div>
     </aside>
 
-    <main class="flex items-center justify-center border-t border-red-900/10 bg-black/30 p-6 backdrop-blur-sm sm:p-10 md:border-l md:border-t-0" role="main">
-      <div class="w-full max-w-sm rounded-2xl border border-red-900/20 bg-white dark:bg-zinc-900/70 p-7 shadow-2xl shadow-black/60 backdrop-blur-xl sm:p-9">
-        <div class="mb-7 hidden items-center gap-3 border-b border-red-900/20 pb-6 md:flex">
+    <main class="flex items-center justify-center border-t border-red-200/60 dark:border-red-900/10 dark:bg-black/30 p-6 backdrop-blur-sm sm:p-10 md:border-l md:border-t-0" role="main">
+      <div class="w-full max-w-sm rounded-2xl border border-red-200/60 dark:border-red-900/20 bg-white dark:bg-zinc-900/70 p-7 shadow-2xl shadow-zinc-300/50 dark:shadow-black/60 backdrop-blur-xl sm:p-9">
+        <div class="mb-7 hidden items-center gap-3 border-b border-red-200/60 dark:border-red-900/20 pb-6 md:flex">
           <img src="logo-lockbadger.png" alt="LockBadger logo" class="h-9 w-9 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(239,68,68,0.45)]" />
           <div>
             <p class="text-base font-bold leading-none text-zinc-900 dark:text-zinc-100">LockBadger</p>
