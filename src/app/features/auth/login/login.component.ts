@@ -4,7 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideLogIn, LucideShieldCheck } from '@lucide/angular';
+import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideLogIn } from '@lucide/angular';
+import { NzAlertComponent } from 'ng-zorro-antd/alert';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
+import { NzInputDirective, NzInputPrefixDirective, NzInputSuffixDirective, NzInputWrapperComponent } from 'ng-zorro-antd/input';
 
 import * as AuthActions from '../../../store/auth/auth.actions';
 import { selectAuthError, selectIsAuthenticated, selectIsLoading } from '../../../store/auth/auth.selectors';
@@ -20,7 +24,13 @@ import { selectAuthError, selectIsAuthenticated, selectIsLoading } from '../../.
     LucideEye,
     LucideEyeOff,
     LucideLogIn,
-    LucideShieldCheck,
+    NzAlertComponent,
+    NzButtonComponent,
+    NzCheckboxComponent,
+    NzInputDirective,
+    NzInputPrefixDirective,
+    NzInputSuffixDirective,
+    NzInputWrapperComponent,
   ],
   templateUrl: './login.component.html',
 })

@@ -3,7 +3,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
-import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideKeyRound, LucideUserPlus, LucideShieldCheck } from '@lucide/angular';
+import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideKeyRound, LucideUserPlus } from '@lucide/angular';
+import { NzAlertComponent } from 'ng-zorro-antd/alert';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzInputDirective, NzInputPrefixDirective, NzInputSuffixDirective, NzInputWrapperComponent } from 'ng-zorro-antd/input';
 
 import * as AuthActions from '../../../store/auth/auth.actions';
 import { selectAuthError, selectIsLoading } from '../../../store/auth/auth.selectors';
@@ -20,7 +23,12 @@ import { selectAuthError, selectIsLoading } from '../../../store/auth/auth.selec
     LucideEyeOff,
     LucideKeyRound,
     LucideUserPlus,
-    LucideShieldCheck,
+    NzAlertComponent,
+    NzButtonComponent,
+    NzInputDirective,
+    NzInputPrefixDirective,
+    NzInputSuffixDirective,
+    NzInputWrapperComponent,
   ],
   templateUrl: './signup.component.html',
 })
