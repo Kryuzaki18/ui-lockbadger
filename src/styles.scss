@@ -24,3 +24,79 @@ html.dark body {
 button, input {
   font-family: inherit;
 }
+
+// ng-zorro (antd) ships a light-only theme by default; these overrides keep
+// the handful of components used across the app legible on dark surfaces.
+html.dark {
+  .ant-input,
+  .ant-input-affix-wrapper {
+    background-color: rgb(24 24 27 / 60%);
+    border-color: rgb(63 63 70);
+    color: rgb(244 244 245);
+  }
+
+  .ant-input::placeholder {
+    color: rgb(113 113 122);
+  }
+
+  .ant-input-affix-wrapper:hover,
+  .ant-input:hover {
+    border-color: #dc2626;
+  }
+
+  .ant-input-affix-wrapper-focused,
+  .ant-input:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgb(220 38 38 / 25%);
+  }
+
+  .ant-tag {
+    background-color: rgb(39 39 42);
+    border-color: rgb(63 63 70);
+    color: rgb(212 212 216);
+  }
+
+  .ant-tag-checkable:not(.ant-tag-checkable-checked):hover {
+    color: #f87171;
+  }
+
+  .ant-tag-checkable-checked {
+    background-color: #dc2626;
+    border-color: #dc2626;
+    color: #fff;
+  }
+
+  .ant-progress-inner {
+    background-color: rgb(39 39 42);
+  }
+
+  .ant-dropdown-menu {
+    background-color: rgb(24 24 27);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 50%);
+  }
+
+  .ant-dropdown-menu-item {
+    color: rgb(228 228 231);
+  }
+
+  .ant-dropdown-menu-item:hover {
+    background-color: rgb(39 39 42);
+  }
+
+  .ant-dropdown-menu-item-danger {
+    color: #f87171;
+  }
+
+  .ant-dropdown-menu-item-danger:hover {
+    background-color: rgb(69 10 10 / 40%);
+    color: #f87171;
+  }
+
+  .ant-btn-text:not(:disabled):hover {
+    background-color: rgb(39 39 42);
+  }
+
+  .ant-empty {
+    color: rgb(113 113 122);
+  }
+}

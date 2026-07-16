@@ -1,0 +1,218 @@
+<div class="flex h-screen overflow-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
+  <app-sidebar [open]="sidebarOpen" (closeSidebar)="closeSidebar()" />
+
+  <div class="flex flex-1 flex-col overflow-hidden">
+    <app-header title="Vault" (menuClick)="toggleSidebar()" />
+
+    <main class="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
+      <div class="mx-auto flex max-w-6xl flex-col gap-6">
+
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Vault</h2>
+            <p class="mt-1 text-sm text-zinc-500">{{ filteredEntries.length }} of {{ entries.length }} saved passwords</p>
+          </div>
+          <button nz-button nzType="primary" class="!flex !items-center !gap-1.5 !shadow-md !shadow-red-950/30">
+            <svg lucidePlus [size]="16" aria-hidden="true"></svg>
+            Add password
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 dark:border-zinc-800/70 bg-white dark:bg-zinc-900/50 p-4">
+          <nz-input-wrapper class="w-full sm:max-w-sm">
+            <svg nzInputPrefix lucideSearch [size]="15" class="text-zinc-400" aria-hidden="true"></svg>
+            <input
+              type="text"
+              nz-input
+              placeholder="Search by name, username or URL…"
+              [(ngModel)]="searchTerm"
+              aria-label="Search vault"
+            />
+          </nz-input-wrapper>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <svg lucideListFilter [size]="14" class="mr-0.5 shrink-0 text-zinc-400" aria-hidden="true"></svg>
+            <nz-tag
+              [nzMode]="'checkable'"
+              [nzChecked]="activeCategory === 'All'"
+              (nzCheckedChange)="selectCategory('All')"
+              class="!cursor-pointer !rounded-full !px-3 !py-0.5"
+            >
+              All
+            </nz-tag>
+            @for (category of categories; track category) {
+              <nz-tag
+                [nzMode]="'checkable'"
+                [nzChecked]="activeCategory === category"
+                (nzCheckedChange)="selectCategory(category)"
+                class="!cursor-pointer !rounded-full !px-3 !py-0.5"
+              >
+                {{ category }}
+              </nz-tag>
+            }
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-zinc-200 dark:border-zinc-800/70 bg-white dark:bg-zinc-900/50">
+          @if (filteredEntries.length) {
+            <ul class="divide-y divide-zinc-200 dark:divide-zinc-800/70">
+              @for (entry of filteredEntries; track entry.id) {
+                <li class="flex flex-col gap-3 px-5 py-4 transition hover:bg-zinc-50 dark:hover:bg-zinc-900/70 sm:flex-row sm:items-center sm:gap-4">
+
+                  <div class="flex min-w-0 flex-1 items-center gap-3">
+                    <nz-avatar
+                      [nzText]="initials(entry.title)"
+                      class="!shrink-0 !bg-red-600 !text-white !font-semibold"
+                    ></nz-avatar>
+
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-1.5">
+                        <p class="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">{{ entry.title }}</p>
+                        <button
+                          type="button"
+                          nz-button
+                          nzType="text"
+                          nzSize="small"
+                          nzShape="circle"
+                          class="!h-5 !w-5 !shrink-0 !p-0"
+                          [attr.aria-label]="entry.favorite ? 'Unmark favorite' : 'Mark favorite'"
+                          [attr.aria-pressed]="entry.favorite"
+                          (click)="toggleFavorite(entry, $event)"
+                        >
+                          <svg
+                            lucideStar
+                            [size]="13"
+                            [ngClass]="entry.favorite ? 'fill-amber-400 text-amber-400' : 'text-zinc-400'"
+                            aria-hidden="true"
+                          ></svg>
+                        </button>
+                      </div>
+                      <p class="truncate text-xs text-zinc-500">{{ entry.url }}</p>
+                    </div>
+                  </div>
+
+                  <div class="flex min-w-0 flex-1 items-center gap-1.5 sm:max-w-[13rem]">
+                    <span class="min-w-0 flex-1 truncate text-sm text-zinc-600 dark:text-zinc-400">{{ entry.username }}</span>
+                    <button
+                      type="button"
+                      nz-button
+                      nzType="text"
+                      nzSize="small"
+                      nzShape="circle"
+                      class="!h-6 !w-6 !shrink-0 !p-0"
+                      nz-tooltip
+                      [nzTooltipTitle]="isCopied(entry, 'username') ? 'Copied!' : 'Copy username'"
+                      aria-label="Copy username"
+                      (click)="copyToClipboard(entry, 'username')"
+                    >
+                      @if (isCopied(entry, 'username')) {
+                        <svg lucideCopyCheck [size]="14" class="text-emerald-500" aria-hidden="true"></svg>
+                      } @else {
+                        <svg lucideCopy [size]="14" class="text-zinc-400" aria-hidden="true"></svg>
+                      }
+                    </button>
+                  </div>
+
+                  <div class="flex min-w-0 flex-1 items-center gap-1.5 sm:max-w-[13rem]">
+                    <svg lucideKeyRound [size]="13" class="shrink-0 text-zinc-400" aria-hidden="true"></svg>
+                    <span class="min-w-0 flex-1 truncate font-mono text-sm text-zinc-600 dark:text-zinc-400">
+                      {{ isPasswordVisible(entry) ? entry.password : '••••••••••••' }}
+                    </span>
+                    <button
+                      type="button"
+                      nz-button
+                      nzType="text"
+                      nzSize="small"
+                      nzShape="circle"
+                      class="!h-6 !w-6 !shrink-0 !p-0"
+                      [attr.aria-label]="isPasswordVisible(entry) ? 'Hide password' : 'Show password'"
+                      [attr.aria-pressed]="isPasswordVisible(entry)"
+                      (click)="togglePasswordVisibility(entry)"
+                    >
+                      @if (isPasswordVisible(entry)) {
+                        <svg lucideEyeOff [size]="14" class="text-zinc-400" aria-hidden="true"></svg>
+                      } @else {
+                        <svg lucideEye [size]="14" class="text-zinc-400" aria-hidden="true"></svg>
+                      }
+                    </button>
+                    <button
+                      type="button"
+                      nz-button
+                      nzType="text"
+                      nzSize="small"
+                      nzShape="circle"
+                      class="!h-6 !w-6 !shrink-0 !p-0"
+                      nz-tooltip
+                      [nzTooltipTitle]="isCopied(entry, 'password') ? 'Copied!' : 'Copy password'"
+                      aria-label="Copy password"
+                      (click)="copyToClipboard(entry, 'password')"
+                    >
+                      @if (isCopied(entry, 'password')) {
+                        <svg lucideCopyCheck [size]="14" class="text-emerald-500" aria-hidden="true"></svg>
+                      } @else {
+                        <svg lucideCopy [size]="14" class="text-zinc-400" aria-hidden="true"></svg>
+                      }
+                    </button>
+                  </div>
+
+                  <div class="flex shrink-0 items-center gap-3 sm:w-32">
+                    <nz-progress
+                      class="!flex-1"
+                      [nzPercent]="strengthMeta(entry).percent"
+                      [nzShowInfo]="false"
+                      [nzStrokeColor]="strengthMeta(entry).strokeColor"
+                      nzSize="small"
+                    ></nz-progress>
+                    <span class="w-10 shrink-0 text-xs font-medium" [ngClass]="strengthMeta(entry).colorClass">
+                      {{ strengthMeta(entry).label }}
+                    </span>
+                  </div>
+
+                  <span class="hidden shrink-0 text-xs text-zinc-500 lg:block lg:w-24">{{ entry.updatedAt }}</span>
+
+                  <div class="flex shrink-0 items-center justify-end gap-1">
+                    <nz-tag class="!m-0 !rounded-full">{{ entry.category }}</nz-tag>
+                    <button
+                      type="button"
+                      nz-button
+                      nzType="text"
+                      nzSize="small"
+                      nzShape="circle"
+                      class="!h-7 !w-7 !shrink-0 !p-0"
+                      nz-dropdown
+                      [nzDropdownMenu]="rowMenu"
+                      nzTrigger="click"
+                      [attr.aria-label]="'More actions for ' + entry.title"
+                    >
+                      <svg lucidePencil [size]="14" class="text-zinc-400" aria-hidden="true"></svg>
+                    </button>
+                    <nz-dropdown-menu #rowMenu="nzDropdownMenu">
+                      <ul nz-menu>
+                        <li nz-menu-item>
+                          <svg lucidePencil [size]="14" class="mr-2 inline-block align-[-2px]" aria-hidden="true"></svg>
+                          Edit
+                        </li>
+                        <li nz-menu-item nzDanger>
+                          <svg lucideTrash2 [size]="14" class="mr-2 inline-block align-[-2px]" aria-hidden="true"></svg>
+                          Delete
+                        </li>
+                      </ul>
+                    </nz-dropdown-menu>
+                  </div>
+
+                </li>
+              }
+            </ul>
+          } @else {
+            <nz-empty
+              class="!py-14"
+              nzNotFoundImage="simple"
+              [nzNotFoundContent]="'No passwords match your search'"
+            ></nz-empty>
+          }
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>

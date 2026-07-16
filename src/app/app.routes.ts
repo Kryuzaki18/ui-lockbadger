@@ -6,6 +6,7 @@ import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { HomeComponent } from './features/home/home.component';
+import { VaultComponent } from './features/vault/vault.component';
 
 export const routes: Routes = [
  {
@@ -23,7 +24,13 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     title: 'Home',
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
+  },
+  {
+    path: 'vault',
+    component: VaultComponent,
+    title: 'Vault',
+    // canActivate: [authGuard],
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' },
