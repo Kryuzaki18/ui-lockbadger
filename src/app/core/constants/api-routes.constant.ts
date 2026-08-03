@@ -1,8 +1,10 @@
+const prefix = '/api/v1';
+
 export const API_ROUTES = {
   auth: {
-    me: '/auth/me',
-    signup: '/auth/signup',
-    login: '/auth/login',
-    logout: '/auth/logout',
+    me: `${prefix}/auth/me`,
+    signup: `${prefix}/auth/signup`,
+    login: `${prefix}/auth/login`,
+    logout: `${prefix}/auth/logout`,
   },
 } as const;
