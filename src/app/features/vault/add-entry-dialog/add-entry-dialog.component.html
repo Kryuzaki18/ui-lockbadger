@@ -1,0 +1,153 @@
+<nz-modal
+  [nzVisible]="open"
+  nzTitle="Add password"
+  [nzFooter]="null"
+  [nzWidth]="480"
+  [nzMaskClosable]="(isSaving$ | async) !== true"
+  [nzClosable]="(isSaving$ | async) !== true"
+  (nzOnCancel)="onCancel()"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="flex flex-col gap-4">
+
+      @if (error$ | async; as errorMsg) {
+        <nz-alert nzType="error" nzShowIcon [nzMessage]="errorMsg" class="!rounded-lg !text-sm" role="alert" aria-live="assertive"></nz-alert>
+      }
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-400" for="entry-title">Title</label>
+        <nz-input-wrapper>
+          <input
+            id="entry-title"
+            type="text"
+            nz-input
+            formControlName="title"
+            placeholder="e.g. GitHub"
+            [nzStatus]="titleControl?.invalid && titleControl?.touched ? 'error' : ''"
+            [attr.aria-invalid]="titleControl?.invalid && titleControl?.touched"
+          />
+        </nz-input-wrapper>
+        @if (titleControl?.errors?.['required'] && titleControl?.touched) {
+          <span class="text-xs text-red-600 dark:text-red-400" role="alert">Title is required.</span>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-400" for="entry-category">Category</label>
+        <nz-select id="entry-category" formControlName="category" nzPlaceHolder="Select a category">
+          @for (category of categories; track category) {
+            <nz-option [nzValue]="category" [nzLabel]="category"></nz-option>
+          }
+        </nz-select>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-400" for="entry-username">Username or email</label>
+        <nz-input-wrapper>
+          <svg nzInputPrefix lucideUser [size]="16" class="text-zinc-500" aria-hidden="true"></svg>
+          <input
+            id="entry-username"
+            type="text"
+            nz-input
+            formControlName="username"
+            placeholder="you@example.com"
+            [nzStatus]="usernameControl?.invalid && usernameControl?.touched ? 'error' : ''"
+            [attr.aria-invalid]="usernameControl?.invalid && usernameControl?.touched"
+          />
+        </nz-input-wrapper>
+        @if (usernameControl?.errors?.['required'] && usernameControl?.touched) {
+          <span class="text-xs text-red-600 dark:text-red-400" role="alert">Username is required.</span>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-400" for="entry-password">Password</label>
+          <button
+            type="button"
+            nz-button
+            nzType="text"
+            nzSize="small"
+            class="!flex !items-center !gap-1 !px-1 !text-xs !text-red-600 dark:!text-red-400"
+            (click)="generatePassword()"
+          >
+            <svg lucideRefreshCw [size]="13" aria-hidden="true"></svg>
+            Generate
+          </button>
+        </div>
+        <nz-input-wrapper>
+          <svg nzInputPrefix lucideKeyRound [size]="16" class="text-zinc-500" aria-hidden="true"></svg>
+          <input
+            id="entry-password"
+            [type]="showPassword ? 'text' : 'password'"
+            nz-input
+            formControlName="password"
+            placeholder="Enter or generate a password"
+            autocomplete="new-password"
+            [nzStatus]="passwordControl?.invalid && passwordControl?.touched ? 'error' : ''"
+            [attr.aria-invalid]="passwordControl?.invalid && passwordControl?.touched"
+          />
+          <button
+            nzInputSuffix
+            type="button"
+            class="flex items-center text-zinc-500 transition hover:text-red-500"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            [attr.aria-pressed]="showPassword"
+          >
+            @if (showPassword) {
+              <svg lucideEyeOff [size]="16" aria-hidden="true"></svg>
+            } @else {
+              <svg lucideEye [size]="16" aria-hidden="true"></svg>
+            }
+          </button>
+        </nz-input-wrapper>
+        @if (passwordControl?.errors?.['required'] && passwordControl?.touched) {
+          <span class="text-xs text-red-600 dark:text-red-400" role="alert">Password is required.</span>
+        }
+        @if (passwordControl?.value) {
+          <div class="flex items-center gap-2">
+            <nz-progress
+              class="!flex-1"
+              [nzPercent]="strengthMeta.percent"
+              [nzShowInfo]="false"
+              [nzStrokeColor]="strengthMeta.strokeColor"
+              nzSize="small"
+            ></nz-progress>
+            <span class="w-10 shrink-0 text-xs font-medium" [style.color]="strengthMeta.strokeColor">{{ strengthMeta.label }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-400" for="entry-url">Website URL</label>
+        <nz-input-wrapper>
+          <svg nzInputPrefix lucideGlobe [size]="16" class="text-zinc-500" aria-hidden="true"></svg>
+          <input id="entry-url" type="text" nz-input formControlName="url" placeholder="example.com" />
+        </nz-input-wrapper>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-400" for="entry-notes">Notes</label>
+        <textarea id="entry-notes" nz-input formControlName="notes" rows="2" placeholder="Optional notes"></textarea>
+      </div>
+
+      <div class="mt-1 flex items-center justify-end gap-2">
+        <button type="button" nz-button nzType="default" (click)="onCancel()" [disabled]="(isSaving$ | async) === true">
+          Cancel
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          class="!shadow-md !shadow-red-950/30"
+          [nzLoading]="(isSaving$ | async) === true"
+          [disabled]="(isSaving$ | async) === true"
+        >
+          Save password
+        </button>
+      </div>
+
+    </form>
+  </ng-container>
+</nz-modal>

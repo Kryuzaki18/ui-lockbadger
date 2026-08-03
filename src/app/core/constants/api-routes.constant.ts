@@ -7,4 +7,8 @@ export const API_ROUTES = {
     login: `${prefix}/auth/login`,
     logout: `${prefix}/auth/logout`,
   },
+  vault: {
+    root: `${prefix}/vault/`,
+    byId: (id: string) => `${prefix}/vault/${id}`,
+  },
 } as const;

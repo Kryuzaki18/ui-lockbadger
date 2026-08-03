@@ -5,14 +5,22 @@
     <app-header title="Vault" (menuClick)="toggleSidebar()" />
 
     <main class="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
+      @let entries = (entries$ | async) ?? [];
+      @let filtered = (filteredEntries$ | async) ?? [];
+
       <div class="mx-auto flex max-w-6xl flex-col gap-6">
 
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Vault</h2>
-            <p class="mt-1 text-sm text-zinc-500">{{ filteredEntries.length }} of {{ entries.length }} saved passwords</p>
+            <p class="mt-1 text-sm text-zinc-500">{{ filtered.length }} of {{ entries.length }} saved passwords</p>
           </div>
-          <button nz-button nzType="primary" class="!flex !items-center !gap-1.5 !shadow-md !shadow-red-950/30">
+          <button
+            nz-button
+            nzType="primary"
+            class="!flex !items-center !gap-1.5 !shadow-md !shadow-red-950/30"
+            (click)="openAddModal()"
+          >
             <svg lucidePlus [size]="16" aria-hidden="true"></svg>
             Add password
           </button>
@@ -54,9 +62,13 @@
         </div>
 
         <div class="rounded-xl border border-zinc-200 dark:border-zinc-800/70 bg-white dark:bg-zinc-900/50">
-          @if (filteredEntries.length) {
+          @if (isLoading$ | async) {
+            <div class="flex justify-center py-14">
+              <nz-spin nzSimple />
+            </div>
+          } @else if (filtered.length) {
             <ul class="divide-y divide-zinc-200 dark:divide-zinc-800/70">
-              @for (entry of filteredEntries; track entry.id) {
+              @for (entry of filtered; track entry.id) {
                 <li class="flex flex-col gap-3 px-5 py-4 transition hover:bg-zinc-50 dark:hover:bg-zinc-900/70 sm:flex-row sm:items-center sm:gap-4">
 
                   <div class="flex min-w-0 flex-1 items-center gap-3">
@@ -75,14 +87,14 @@
                           nzSize="small"
                           nzShape="circle"
                           class="!h-5 !w-5 !shrink-0 !p-0"
-                          [attr.aria-label]="entry.favorite ? 'Unmark favorite' : 'Mark favorite'"
-                          [attr.aria-pressed]="entry.favorite"
+                          [attr.aria-label]="isFavorite(entry) ? 'Unmark favorite' : 'Mark favorite'"
+                          [attr.aria-pressed]="isFavorite(entry)"
                           (click)="toggleFavorite(entry, $event)"
                         >
                           <svg
                             lucideStar
                             [size]="13"
-                            [ngClass]="entry.favorite ? 'fill-amber-400 text-amber-400' : 'text-zinc-400'"
+                            [ngClass]="isFavorite(entry) ? 'fill-amber-400 text-amber-400' : 'text-zinc-400'"
                             aria-hidden="true"
                           ></svg>
                         </button>
@@ -163,12 +175,12 @@
                       [nzStrokeColor]="strengthMeta(entry).strokeColor"
                       nzSize="small"
                     ></nz-progress>
-                    <span class="w-10 shrink-0 text-xs font-medium" [ngClass]="strengthMeta(entry).colorClass">
+                    <span class="w-10 shrink-0 text-xs font-medium" [style.color]="strengthMeta(entry).strokeColor">
                       {{ strengthMeta(entry).label }}
                     </span>
                   </div>
 
-                  <span class="hidden shrink-0 text-xs text-zinc-500 lg:block lg:w-24">{{ entry.updatedAt }}</span>
+                  <span class="hidden shrink-0 text-xs text-zinc-500 lg:block lg:w-24">{{ relativeUpdatedAt(entry) }}</span>
 
                   <div class="flex shrink-0 items-center justify-end gap-1">
                     <nz-tag class="!m-0 !rounded-full">{{ entry.category }}</nz-tag>
@@ -207,7 +219,7 @@
             <nz-empty
               class="!py-14"
               nzNotFoundImage="simple"
-              [nzNotFoundContent]="'No passwords match your search'"
+              [nzNotFoundContent]="entries.length ? 'No passwords match your search' : 'No passwords saved yet'"
             ></nz-empty>
           }
         </div>
@@ -215,4 +227,6 @@
       </div>
     </main>
   </div>
+
+  <app-add-entry-dialog [open]="isAddModalOpen" (closeDialog)="closeAddModal()" />
 </div>
