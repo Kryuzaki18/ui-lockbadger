@@ -1,9 +1,9 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
-import { Subject, takeUntil } from 'rxjs';
 import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideLogIn } from '@lucide/angular';
 import { NzAlertComponent } from 'ng-zorro-antd/alert';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(Store);
   private readonly router = inject(Router);
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly isLoading$ = this.store.select(selectIsLoading);
   readonly error$ = this.store.select(selectAuthError);
@@ -51,18 +51,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     rememberMe: [false],
   });
 
+  get emailControl() { return this.form.get('email'); }
+  get passwordControl() { return this.form.get('password'); }
+
   ngOnInit(): void {
     this.store
       .select(selectIsAuthenticated)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((authenticated) => {
         if (authenticated) this.router.navigate(['/home']);
       });
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.store.dispatch(AuthActions.clearAuthError());
   }
 
@@ -74,7 +75,4 @@ export class LoginComponent implements OnInit, OnDestroy {
     const { email, password, rememberMe } = this.form.value;
     this.store.dispatch(AuthActions.login({ email, password, rememberMe }));
   }
-
-  get emailControl() { return this.form.get('email'); }
-  get passwordControl() { return this.form.get('password'); }
 }

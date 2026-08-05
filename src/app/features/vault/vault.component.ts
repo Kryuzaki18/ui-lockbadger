@@ -1,9 +1,10 @@
 import { AsyncPipe, NgClass } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
-import { BehaviorSubject, combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import {
   LucideCopy,
   LucideCopyCheck,
@@ -82,12 +83,12 @@ const STRENGTH_META: Record<VaultPasswordStrength, { label: string; percent: num
   providers: [NzModalService],
   templateUrl: './vault.component.html'
 })
-export class VaultComponent implements OnInit, OnDestroy {
+export class VaultComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
   private readonly modal = inject(NzModalService);
   private readonly message = inject(NzMessageService);
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly categories = VAULT_CATEGORIES;
 
@@ -143,21 +144,16 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.store.dispatch(VaultActions.loadVaultEntries());
 
     this.actions$
-      .pipe(ofType(VaultActions.deleteVaultEntrySuccess), takeUntil(this.destroy$))
+      .pipe(ofType(VaultActions.deleteVaultEntrySuccess), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.message.success('Password deleted.');
       });
 
     this.actions$
-      .pipe(ofType(VaultActions.deleteVaultEntryFailure), takeUntil(this.destroy$))
+      .pipe(ofType(VaultActions.deleteVaultEntryFailure), takeUntilDestroyed(this.destroyRef))
       .subscribe(({ error }) => {
         this.message.error(error);
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   toggleSidebar(): void {

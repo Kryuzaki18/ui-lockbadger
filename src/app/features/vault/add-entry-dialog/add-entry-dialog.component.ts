@@ -1,9 +1,9 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
-import { Subject, takeUntil } from 'rxjs';
 import {
   LucideEye,
   LucideEyeOff,
@@ -65,12 +65,12 @@ const PASSWORD_CHARSET =
   providers: [NzModalService],
   templateUrl: './add-entry-dialog.component.html',
 })
-export class AddEntryDialogComponent implements OnChanges, OnInit, OnDestroy {
+export class AddEntryDialogComponent implements OnChanges, OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
   private readonly message = inject(NzMessageService);
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   @Input() open = false;
   @Input() entry: VaultEntry | null = null;
@@ -97,7 +97,7 @@ export class AddEntryDialogComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.actions$
-      .pipe(ofType(VaultActions.addVaultEntrySuccess), takeUntil(this.destroy$))
+      .pipe(ofType(VaultActions.addVaultEntrySuccess), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.message.success('Password saved to your vault.');
         this.resetForm();
@@ -105,7 +105,7 @@ export class AddEntryDialogComponent implements OnChanges, OnInit, OnDestroy {
       });
 
     this.actions$
-      .pipe(ofType(VaultActions.updateVaultEntrySuccess), takeUntil(this.destroy$))
+      .pipe(ofType(VaultActions.updateVaultEntrySuccess), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.message.success('Password updated.');
         this.resetForm();
@@ -118,11 +118,6 @@ export class AddEntryDialogComponent implements OnChanges, OnInit, OnDestroy {
       this.resetForm();
       this.store.dispatch(VaultActions.clearVaultError());
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   get titleControl() { return this.form.get('title'); }
