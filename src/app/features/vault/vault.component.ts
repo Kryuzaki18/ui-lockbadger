@@ -34,16 +34,11 @@ import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 import { HeaderComponent } from '../commons/header/header.component';
 import { SidebarComponent } from '../commons/sidebar/sidebar.component';
 import { AddEntryDialogComponent } from './add-entry-dialog/add-entry-dialog.component';
-import { VAULT_CATEGORIES, VaultCategory, VaultEntry, VaultPasswordStrength } from '../../core/types/vault.model';
+import { VaultCategory, VaultEntry } from '../../core/types/vault.model';
+import { VAULT_CATEGORIES, VAULT_STRENGTH_META } from '../../core/constants/vault.constant';
 import { computePasswordStrength, formatRelativeTime } from '../../core/utils/vault.util';
 import * as VaultActions from '../../store/vault/vault.actions';
 import { selectVaultDeletingId, selectVaultEntries, selectVaultLoading } from '../../store/vault/vault.selectors';
-
-const STRENGTH_META: Record<VaultPasswordStrength, { label: string; percent: number; strokeColor: string }> = {
-  weak: { label: 'Weak', percent: 33, strokeColor: '#ef4444' },
-  fair: { label: 'Fair', percent: 66, strokeColor: '#f59e0b' },
-  strong: { label: 'Strong', percent: 100, strokeColor: '#10b981' },
-};
 
 @Component({
   selector: 'app-vault',
@@ -223,7 +218,7 @@ export class VaultComponent implements OnInit {
   }
 
   strengthMeta(entry: VaultEntry) {
-    return STRENGTH_META[computePasswordStrength(entry.password)];
+    return VAULT_STRENGTH_META[computePasswordStrength(entry.password)];
   }
 
   relativeUpdatedAt(entry: VaultEntry): string {

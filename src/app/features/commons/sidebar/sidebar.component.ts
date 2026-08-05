@@ -22,12 +22,7 @@ import { NzMenuDirective, NzMenuItemComponent } from 'ng-zorro-antd/menu';
 import { NzTagComponent } from 'ng-zorro-antd/tag';
 import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 
-
-interface NavItem {
-  label: string;
-  icon: 'dashboard' | 'vault' | 'generator' | 'reports' | 'settings';
-  route: string | null;
-}
+import { NAV_ITEMS } from '../../../core/constants/nav.constant';
 
 @Component({
   selector: 'app-sidebar',
@@ -59,13 +54,7 @@ export class SidebarComponent {
 
   readonly user$ = this.store.select(selectAuthUser);
 
-  readonly navItems: NavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', route: '/home' },
-    { label: 'Vault', icon: 'vault', route: '/vault' },
-    { label: 'Generator', icon: 'generator', route: null },
-    { label: 'Reports', icon: 'reports', route: null },
-    { label: 'Settings', icon: 'settings', route: null },
-  ];
+  readonly navItems = NAV_ITEMS;
 
   onLogout(): void {
     this.store.dispatch(AuthActions.logout());

@@ -1,4 +1,4 @@
-export const VAULT_CATEGORIES = ['Logins', 'Social', 'Finance', 'Work', 'Shopping'] as const;
+import type { VAULT_CATEGORIES } from '../constants/vault.constant';
 
 export type VaultCategory = (typeof VAULT_CATEGORIES)[number];
 

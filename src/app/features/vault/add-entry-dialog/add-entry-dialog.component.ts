@@ -28,16 +28,13 @@ import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
 import * as VaultActions from '../../../store/vault/vault.actions';
 import { selectVaultError, selectVaultSaving } from '../../../store/vault/vault.selectors';
 import { computePasswordStrength } from '../../../core/utils/vault.util';
-import { VAULT_CATEGORIES, VaultCategory, VaultEntry, VaultPasswordStrength } from '../../../core/types/vault.model';
-
-const STRENGTH_META: Record<VaultPasswordStrength, { label: string; percent: number; strokeColor: string }> = {
-  weak: { label: 'Weak', percent: 33, strokeColor: '#ef4444' },
-  fair: { label: 'Fair', percent: 66, strokeColor: '#f59e0b' },
-  strong: { label: 'Strong', percent: 100, strokeColor: '#10b981' },
-};
-
-const PASSWORD_CHARSET =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+';
+import { VaultCategory, VaultEntry } from '../../../core/types/vault.model';
+import {
+  DEFAULT_VAULT_CATEGORY,
+  VAULT_CATEGORIES,
+  VAULT_PASSWORD_CHARSET,
+  VAULT_STRENGTH_META,
+} from '../../../core/constants/vault.constant';
 
 @Component({
   selector: 'app-add-entry-dialog',
@@ -84,7 +81,7 @@ export class AddEntryDialogComponent implements OnChanges, OnInit {
 
   form: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.maxLength(200)]],
-    category: ['Logins' as VaultCategory, Validators.required],
+    category: [DEFAULT_VAULT_CATEGORY as VaultCategory, Validators.required],
     username: ['', Validators.required],
     password: ['', [Validators.required, Validators.minLength(1)]],
     url: [''],
@@ -125,13 +122,13 @@ export class AddEntryDialogComponent implements OnChanges, OnInit {
   get passwordControl() { return this.form.get('password'); }
 
   get strengthMeta() {
-    return STRENGTH_META[computePasswordStrength(this.passwordControl?.value ?? '')];
+    return VAULT_STRENGTH_META[computePasswordStrength(this.passwordControl?.value ?? '')];
   }
 
   generatePassword(): void {
     const randomValues = new Uint32Array(20);
     crypto.getRandomValues(randomValues);
-    const generated = Array.from(randomValues, (value) => PASSWORD_CHARSET[value % PASSWORD_CHARSET.length]).join('');
+    const generated = Array.from(randomValues, (value) => VAULT_PASSWORD_CHARSET[value % VAULT_PASSWORD_CHARSET.length]).join('');
     this.form.patchValue({ password: generated });
     this.showPassword = true;
   }
@@ -166,7 +163,7 @@ export class AddEntryDialogComponent implements OnChanges, OnInit {
   private resetForm(): void {
     this.form.reset({
       title: this.entry?.title ?? '',
-      category: this.entry?.category ?? 'Logins',
+      category: this.entry?.category ?? DEFAULT_VAULT_CATEGORY,
       username: this.entry?.username ?? '',
       password: this.entry?.password ?? '',
       url: this.entry?.url ?? '',
