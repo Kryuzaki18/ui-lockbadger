@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import {
   LucideBell,
@@ -11,20 +12,28 @@ import {
   LucideShieldAlert,
   LucideSun,
   LucideUserPlus,
+  LucideX,
 } from '@lucide/angular';
 
 import { NzBadgeComponent } from 'ng-zorro-antd/badge';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
-import { NzInputDirective, NzInputPrefixDirective, NzInputWrapperComponent } from 'ng-zorro-antd/input';
+import {
+  NzInputDirective,
+  NzInputPrefixDirective,
+  NzInputSuffixDirective,
+  NzInputWrapperComponent,
+} from 'ng-zorro-antd/input';
 import { NzPopoverDirective } from 'ng-zorro-antd/popover';
 
 import { STORAGE } from '../../../core/constants/storage.constant';
 import { HEADER_NOTIFICATIONS } from '../../../core/constants/data.constants';
+
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 
 @Component({
   selector: 'app-header',
   imports: [
+    FormsModule,
     LucideBell,
     LucideCircleCheck,
     LucideClock,
@@ -35,10 +44,12 @@ import { LocalStorageService } from '../../../core/services/local-storage.servic
     LucideShieldAlert,
     LucideSun,
     LucideUserPlus,
+    LucideX,
     NzBadgeComponent,
     NzButtonComponent,
     NzInputDirective,
     NzInputPrefixDirective,
+    NzInputSuffixDirective,
     NzInputWrapperComponent,
     NzPopoverDirective,
   ],
@@ -49,6 +60,7 @@ export class HeaderComponent {
   @Output() menuClick = new EventEmitter<void>();
 
   isNotifOpen = false;
+  searchTerm = '';
 
   private readonly localStorageService = inject(LocalStorageService);
 
@@ -62,5 +74,9 @@ export class HeaderComponent {
 
   toggleTheme(): void {
     this.localStorageService.updateLocalStorageSignal(STORAGE.theme, this.theme() === 'dark' ? 'light' : 'dark');
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
   }
 }

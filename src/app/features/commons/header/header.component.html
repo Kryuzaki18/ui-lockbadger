@@ -15,7 +15,18 @@
   <div class="ml-auto flex items-center gap-3">
     <nz-input-wrapper class="!hidden !w-56 sm:!flex lg:!w-72">
       <svg nzInputPrefix lucideSearch [size]="15" class="text-zinc-500" aria-hidden="true"></svg>
-      <input type="search" nz-input placeholder="Search your vault…" aria-label="Search your vault" />
+      <input type="text" nz-input placeholder="Search your vault…" aria-label="Search your vault" [(ngModel)]="searchTerm" />
+      @if (searchTerm) {
+        <button
+          nzInputSuffix
+          type="button"
+          class="flex items-center text-zinc-500 transition hover:text-red-500"
+          (click)="clearSearch()"
+          aria-label="Clear search"
+        >
+          <svg lucideX [size]="14" aria-hidden="true"></svg>
+        </button>
+      }
     </nz-input-wrapper>
 
     <button

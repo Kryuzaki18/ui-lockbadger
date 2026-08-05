@@ -37,6 +37,17 @@
               [(ngModel)]="searchTerm"
               aria-label="Search vault"
             />
+            @if (searchTerm) {
+              <button
+                nzInputSuffix
+                type="button"
+                class="flex items-center text-zinc-500 transition hover:text-red-500"
+                (click)="clearSearch()"
+                aria-label="Clear search"
+              >
+                <svg lucideX [size]="14" aria-hidden="true"></svg>
+              </button>
+            }
           </nz-input-wrapper>
 
           <div class="flex flex-wrap items-center gap-2">

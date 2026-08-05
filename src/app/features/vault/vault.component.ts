@@ -3,9 +3,10 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
-import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+
 import {
   LucideCopy,
   LucideCopyCheck,
@@ -18,12 +19,19 @@ import {
   LucideSearch,
   LucideStar,
   LucideTrash2,
+  LucideX,
 } from '@lucide/angular';
+
 import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzDropdownMenuComponent, NzDropdownDirective } from 'ng-zorro-antd/dropdown';
 import { NzEmptyComponent } from 'ng-zorro-antd/empty';
-import { NzInputDirective, NzInputPrefixDirective, NzInputWrapperComponent } from 'ng-zorro-antd/input';
+import {
+  NzInputDirective,
+  NzInputPrefixDirective,
+  NzInputSuffixDirective,
+  NzInputWrapperComponent,
+} from 'ng-zorro-antd/input';
 import { NzMenuDirective, NzMenuItemComponent } from 'ng-zorro-antd/menu';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -35,9 +43,11 @@ import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 import { HeaderComponent } from '../commons/header/header.component';
 import { SidebarComponent } from '../commons/sidebar/sidebar.component';
 import { AddEntryDialogComponent } from './add-entry-dialog/add-entry-dialog.component';
+
 import { VaultCategory, VaultEntry } from '../../core/types/vault.model';
 import { VAULT_CATEGORIES, VAULT_STRENGTH_META } from '../../core/constants/vault.constant';
 import { computePasswordStrength, formatRelativeTime } from '../../core/utils/vault.util';
+
 import * as VaultActions from '../../store/vault/vault.actions';
 import { selectVaultDeletingId, selectVaultEntries, selectVaultLoading } from '../../store/vault/vault.selectors';
 
@@ -57,6 +67,7 @@ import { selectVaultDeletingId, selectVaultEntries, selectVaultLoading } from '.
     NzEmptyComponent,
     NzInputDirective,
     NzInputPrefixDirective,
+    NzInputSuffixDirective,
     NzInputWrapperComponent,
     NzMenuDirective,
     NzMenuItemComponent,
@@ -75,6 +86,7 @@ import { selectVaultDeletingId, selectVaultEntries, selectVaultLoading } from '.
     LucideSearch,
     LucideStar,
     LucideTrash2,
+    LucideX,
   ],
   providers: [NzModalService],
   templateUrl: './vault.component.html'
@@ -197,6 +209,10 @@ export class VaultComponent implements OnInit {
 
   selectCategory(category: VaultCategory | 'All'): void {
     this.activeCategory$.next(category);
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
   }
 
   toggleFavorite(entry: VaultEntry, event: Event): void {
