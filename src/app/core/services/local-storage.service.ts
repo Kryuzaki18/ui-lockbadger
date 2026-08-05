@@ -1,4 +1,4 @@
-import { Injectable, signal, effect } from '@angular/core';
+import { EnvironmentInjector, Injectable, inject, signal, effect } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -6,14 +6,19 @@ import { Injectable, signal, effect } from '@angular/core';
 export class LocalStorageService {
   private localStorageSignal = new Map<string, ReturnType<typeof signal>>();
 
+  private readonly environmentInjector = inject(EnvironmentInjector);
+
   getLocalStorageSignal<T>(key: string, defaultValue: T) {
     if (!this.localStorageSignal.has(key)) {
       const initial = this.getLocalStorageItem<T>(key, defaultValue);
       const s = signal<T>(initial);
 
-      effect(() => {
-        this.setLocalStorageItem(key, s());
-      });
+      effect(
+        () => {
+          this.setLocalStorageItem(key, s());
+        },
+        { injector: this.environmentInjector, manualCleanup: true },
+      );
 
       this.localStorageSignal.set(key, s);
     }

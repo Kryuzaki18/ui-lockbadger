@@ -152,10 +152,12 @@ export class VaultComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(VaultActions.loadVaultEntries());
 
-    const searchParam = this.route.snapshot.queryParamMap.get('search');
-    if (searchParam) {
-      this.searchTerm = searchParam;
-    }
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const searchParam = params.get('search');
+      if (searchParam) {
+        this.searchTerm = searchParam;
+      }
+    });
 
     this.actions$
       .pipe(ofType(VaultActions.deleteVaultEntrySuccess), takeUntilDestroyed(this.destroyRef))
