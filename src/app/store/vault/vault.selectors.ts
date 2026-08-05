@@ -7,4 +7,5 @@ export const selectVaultState = createFeatureSelector<VaultState>(VAULT_FEATURE_
 export const selectVaultEntries = createSelector(selectVaultState, (state) => state.entries);
 export const selectVaultLoading = createSelector(selectVaultState, (state) => state.isLoading);
 export const selectVaultSaving = createSelector(selectVaultState, (state) => state.isSaving);
+export const selectVaultDeletingId = createSelector(selectVaultState, (state) => state.deletingId);
 export const selectVaultError = createSelector(selectVaultState, (state) => state.error);

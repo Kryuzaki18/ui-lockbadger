@@ -19,4 +19,12 @@ export class VaultService {
   create(input: VaultEntryInput): Observable<VaultEntry> {
     return this.http.post<VaultEntry>(`${environment.apiUrl}${API_ROUTES.vault.root}`, input);
   }
+
+  update(id: string, input: Partial<VaultEntryInput>): Observable<VaultEntry> {
+    return this.http.patch<VaultEntry>(`${environment.apiUrl}${API_ROUTES.vault.byId(id)}`, input);
+  }
+
+  remove(id: string): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}${API_ROUTES.vault.byId(id)}`);
+  }
 }

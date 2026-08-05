@@ -7,6 +7,7 @@
     <main class="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
       @let entries = (entries$ | async) ?? [];
       @let filtered = (filteredEntries$ | async) ?? [];
+      @let deletingId = deletingId$ | async;
 
       <div class="mx-auto flex max-w-6xl flex-col gap-6">
 
@@ -184,32 +185,38 @@
 
                   <div class="flex shrink-0 items-center justify-end gap-1">
                     <nz-tag class="!m-0 !rounded-full">{{ entry.category }}</nz-tag>
-                    <button
-                      type="button"
-                      nz-button
-                      nzType="text"
-                      nzSize="small"
-                      nzShape="circle"
-                      class="!h-7 !w-7 !shrink-0 !p-0"
-                      nz-dropdown
-                      [nzDropdownMenu]="rowMenu"
-                      nzTrigger="click"
-                      [attr.aria-label]="'More actions for ' + entry.title"
-                    >
-                      <svg lucidePencil [size]="14" class="text-zinc-400" aria-hidden="true"></svg>
-                    </button>
-                    <nz-dropdown-menu #rowMenu="nzDropdownMenu">
-                      <ul nz-menu>
-                        <li nz-menu-item>
-                          <svg lucidePencil [size]="14" class="mr-2 inline-block align-[-2px]" aria-hidden="true"></svg>
-                          Edit
-                        </li>
-                        <li nz-menu-item nzDanger>
-                          <svg lucideTrash2 [size]="14" class="mr-2 inline-block align-[-2px]" aria-hidden="true"></svg>
-                          Delete
-                        </li>
-                      </ul>
-                    </nz-dropdown-menu>
+                    @if (isDeleting(entry, deletingId)) {
+                      <span class="!h-7 !w-7 flex shrink-0 items-center justify-center">
+                        <nz-spin nzSimple nzSize="small"></nz-spin>
+                      </span>
+                    } @else {
+                      <button
+                        type="button"
+                        nz-button
+                        nzType="text"
+                        nzSize="small"
+                        nzShape="circle"
+                        class="!h-7 !w-7 !shrink-0 !p-0"
+                        nz-dropdown
+                        [nzDropdownMenu]="rowMenu"
+                        nzTrigger="click"
+                        [attr.aria-label]="'More actions for ' + entry.title"
+                      >
+                        <svg lucidePencil [size]="14" class="text-zinc-400" aria-hidden="true"></svg>
+                      </button>
+                      <nz-dropdown-menu #rowMenu="nzDropdownMenu">
+                        <ul nz-menu>
+                          <li nz-menu-item (click)="openEditModal(entry)">
+                            <svg lucidePencil [size]="14" class="mr-2 inline-block align-[-2px]" aria-hidden="true"></svg>
+                            Edit
+                          </li>
+                          <li nz-menu-item nzDanger (click)="confirmDelete(entry)">
+                            <svg lucideTrash2 [size]="14" class="mr-2 inline-block align-[-2px]" aria-hidden="true"></svg>
+                            Delete
+                          </li>
+                        </ul>
+                      </nz-dropdown-menu>
+                    }
                   </div>
 
                 </li>
@@ -228,5 +235,5 @@
     </main>
   </div>
 
-  <app-add-entry-dialog [open]="isAddModalOpen" (closeDialog)="closeAddModal()" />
+  <app-add-entry-dialog [open]="isEntryDialogOpen" [entry]="editingEntry" (closeDialog)="closeEntryDialog()" />
 </div>

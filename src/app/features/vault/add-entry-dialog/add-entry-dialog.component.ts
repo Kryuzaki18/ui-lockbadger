@@ -28,7 +28,7 @@ import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
 import * as VaultActions from '../../../store/vault/vault.actions';
 import { selectVaultError, selectVaultSaving } from '../../../store/vault/vault.selectors';
 import { computePasswordStrength } from '../../../core/utils/vault.util';
-import { VAULT_CATEGORIES, VaultCategory, VaultPasswordStrength } from '../../../core/types/vault.model';
+import { VAULT_CATEGORIES, VaultCategory, VaultEntry, VaultPasswordStrength } from '../../../core/types/vault.model';
 
 const STRENGTH_META: Record<VaultPasswordStrength, { label: string; percent: number; strokeColor: string }> = {
   weak: { label: 'Weak', percent: 33, strokeColor: '#ef4444' },
@@ -73,6 +73,7 @@ export class AddEntryDialogComponent implements OnChanges, OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   @Input() open = false;
+  @Input() entry: VaultEntry | null = null;
   @Output() closeDialog = new EventEmitter<void>();
 
   readonly categories = VAULT_CATEGORIES;
@@ -90,11 +91,23 @@ export class AddEntryDialogComponent implements OnChanges, OnInit, OnDestroy {
     notes: [''],
   });
 
+  get isEditMode(): boolean {
+    return !!this.entry;
+  }
+
   ngOnInit(): void {
     this.actions$
       .pipe(ofType(VaultActions.addVaultEntrySuccess), takeUntil(this.destroy$))
       .subscribe(() => {
         this.message.success('Password saved to your vault.');
+        this.resetForm();
+        this.closeDialog.emit();
+      });
+
+    this.actions$
+      .pipe(ofType(VaultActions.updateVaultEntrySuccess), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.message.success('Password updated.');
         this.resetForm();
         this.closeDialog.emit();
       });
@@ -139,28 +152,30 @@ export class AddEntryDialogComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     const { title, category, username, password, url, notes } = this.form.value;
-    this.store.dispatch(
-      VaultActions.addVaultEntry({
-        input: {
-          title,
-          category,
-          username,
-          password,
-          url: url?.trim() ? url.trim() : undefined,
-          notes: notes?.trim() ? notes.trim() : undefined,
-        },
-      }),
-    );
+    const input = {
+      title,
+      category,
+      username,
+      password,
+      url: url?.trim() ? url.trim() : undefined,
+      notes: notes?.trim() ? notes.trim() : undefined,
+    };
+
+    if (this.entry) {
+      this.store.dispatch(VaultActions.updateVaultEntry({ id: this.entry.id, input }));
+    } else {
+      this.store.dispatch(VaultActions.addVaultEntry({ input }));
+    }
   }
 
   private resetForm(): void {
     this.form.reset({
-      title: '',
-      category: 'Logins',
-      username: '',
-      password: '',
-      url: '',
-      notes: '',
+      title: this.entry?.title ?? '',
+      category: this.entry?.category ?? 'Logins',
+      username: this.entry?.username ?? '',
+      password: this.entry?.password ?? '',
+      url: this.entry?.url ?? '',
+      notes: this.entry?.notes ?? '',
     });
     this.showPassword = false;
   }

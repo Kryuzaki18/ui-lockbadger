@@ -1,6 +1,6 @@
 <nz-modal
   [nzVisible]="open"
-  nzTitle="Add password"
+  [nzTitle]="isEditMode ? 'Edit password' : 'Add password'"
   [nzFooter]="null"
   [nzWidth]="480"
   [nzMaskClosable]="(isSaving$ | async) !== true"
@@ -144,7 +144,7 @@
           [nzLoading]="(isSaving$ | async) === true"
           [disabled]="(isSaving$ | async) === true"
         >
-          Save password
+          {{ isEditMode ? 'Save changes' : 'Save password' }}
         </button>
       </div>
 

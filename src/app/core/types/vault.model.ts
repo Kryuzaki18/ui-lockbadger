@@ -29,5 +29,6 @@ export interface VaultState {
   entries: VaultEntry[];
   isLoading: boolean;
   isSaving: boolean;
+  deletingId: string | null;
   error: string | null;
 }

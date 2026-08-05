@@ -8,6 +8,7 @@ export const initialVaultState: VaultState = {
   entries: [],
   isLoading: false,
   isSaving: false,
+  deletingId: null,
   error: null,
 };
 
@@ -47,6 +48,42 @@ export const vaultReducer = createReducer(
   on(VaultActions.addVaultEntryFailure, (state, { error }) => ({
     ...state,
     isSaving: false,
+    error,
+  })),
+
+  on(VaultActions.updateVaultEntry, (state) => ({
+    ...state,
+    isSaving: true,
+    error: null,
+  })),
+
+  on(VaultActions.updateVaultEntrySuccess, (state, { entry }) => ({
+    ...state,
+    entries: state.entries.map((e) => (e.id === entry.id ? entry : e)),
+    isSaving: false,
+  })),
+
+  on(VaultActions.updateVaultEntryFailure, (state, { error }) => ({
+    ...state,
+    isSaving: false,
+    error,
+  })),
+
+  on(VaultActions.deleteVaultEntry, (state, { id }) => ({
+    ...state,
+    deletingId: id,
+    error: null,
+  })),
+
+  on(VaultActions.deleteVaultEntrySuccess, (state, { id }) => ({
+    ...state,
+    entries: state.entries.filter((e) => e.id !== id),
+    deletingId: null,
+  })),
+
+  on(VaultActions.deleteVaultEntryFailure, (state, { error }) => ({
+    ...state,
+    deletingId: null,
     error,
   })),
 

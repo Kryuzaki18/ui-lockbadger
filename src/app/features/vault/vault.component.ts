@@ -2,6 +2,7 @@ import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Actions, ofType } from '@ngrx/effects';
 import { BehaviorSubject, combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
 import {
   LucideCopy,
@@ -22,6 +23,8 @@ import { NzDropdownMenuComponent, NzDropdownDirective } from 'ng-zorro-antd/drop
 import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 import { NzInputDirective, NzInputPrefixDirective, NzInputWrapperComponent } from 'ng-zorro-antd/input';
 import { NzMenuDirective, NzMenuItemComponent } from 'ng-zorro-antd/menu';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzProgressComponent } from 'ng-zorro-antd/progress';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NzTagComponent } from 'ng-zorro-antd/tag';
@@ -33,7 +36,7 @@ import { AddEntryDialogComponent } from './add-entry-dialog/add-entry-dialog.com
 import { VAULT_CATEGORIES, VaultCategory, VaultEntry, VaultPasswordStrength } from '../../core/types/vault.model';
 import { computePasswordStrength, formatRelativeTime } from '../../core/utils/vault.util';
 import * as VaultActions from '../../store/vault/vault.actions';
-import { selectVaultEntries, selectVaultLoading } from '../../store/vault/vault.selectors';
+import { selectVaultDeletingId, selectVaultEntries, selectVaultLoading } from '../../store/vault/vault.selectors';
 
 const STRENGTH_META: Record<VaultPasswordStrength, { label: string; percent: number; strokeColor: string }> = {
   weak: { label: 'Weak', percent: 33, strokeColor: '#ef4444' },
@@ -76,16 +79,21 @@ const STRENGTH_META: Record<VaultPasswordStrength, { label: string; percent: num
     LucideStar,
     LucideTrash2,
   ],
+  providers: [NzModalService],
   templateUrl: './vault.component.html'
 })
 export class VaultComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);
+  private readonly actions$ = inject(Actions);
+  private readonly modal = inject(NzModalService);
+  private readonly message = inject(NzMessageService);
   private readonly destroy$ = new Subject<void>();
 
   readonly categories = VAULT_CATEGORIES;
 
   readonly entries$ = this.store.select(selectVaultEntries);
   readonly isLoading$ = this.store.select(selectVaultLoading);
+  readonly deletingId$ = this.store.select(selectVaultDeletingId);
 
   private readonly searchTerm$ = new BehaviorSubject<string>('');
   private readonly activeCategory$ = new BehaviorSubject<VaultCategory | 'All'>('All');
@@ -112,7 +120,8 @@ export class VaultComponent implements OnInit, OnDestroy {
   );
 
   sidebarOpen = false;
-  isAddModalOpen = false;
+  isEntryDialogOpen = false;
+  editingEntry: VaultEntry | null = null;
 
   private readonly favoriteIds = new Set<string>();
   private readonly visiblePasswordIds = new Set<string>();
@@ -132,6 +141,18 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(VaultActions.loadVaultEntries());
+
+    this.actions$
+      .pipe(ofType(VaultActions.deleteVaultEntrySuccess), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.message.success('Password deleted.');
+      });
+
+    this.actions$
+      .pipe(ofType(VaultActions.deleteVaultEntryFailure), takeUntil(this.destroy$))
+      .subscribe(({ error }) => {
+        this.message.error(error);
+      });
   }
 
   ngOnDestroy(): void {
@@ -148,11 +169,32 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   openAddModal(): void {
-    this.isAddModalOpen = true;
+    this.editingEntry = null;
+    this.isEntryDialogOpen = true;
   }
 
-  closeAddModal(): void {
-    this.isAddModalOpen = false;
+  openEditModal(entry: VaultEntry): void {
+    this.editingEntry = entry;
+    this.isEntryDialogOpen = true;
+  }
+
+  closeEntryDialog(): void {
+    this.isEntryDialogOpen = false;
+  }
+
+  isDeleting(entry: VaultEntry, deletingId: string | null): boolean {
+    return deletingId === entry.id;
+  }
+
+  confirmDelete(entry: VaultEntry): void {
+    this.modal.confirm({
+      nzTitle: 'Delete this password?',
+      nzContent: `"${entry.title}" will be permanently removed from your vault.`,
+      nzOkText: 'Delete',
+      nzOkDanger: true,
+      nzOnOk: () => this.store.dispatch(VaultActions.deleteVaultEntry({ id: entry.id })),
+      nzCancelText: 'Cancel',
+    });
   }
 
   selectCategory(category: VaultCategory | 'All'): void {
