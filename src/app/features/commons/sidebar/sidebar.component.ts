@@ -1,7 +1,11 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+
 import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../store/auth/auth.actions';
+import { selectAuthUser } from '../../../store/auth/auth.selectors';
+
 import {
   LucideGauge,
   LucideKeyRound,
@@ -11,14 +15,13 @@ import {
   LucideWand2,
   LucideX,
 } from '@lucide/angular';
+
 import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzMenuDirective, NzMenuItemComponent } from 'ng-zorro-antd/menu';
 import { NzTagComponent } from 'ng-zorro-antd/tag';
 import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 
-import * as AuthActions from '../../../store/auth/auth.actions';
-import { selectAuthUser } from '../../../store/auth/auth.selectors';
 
 interface NavItem {
   label: string;

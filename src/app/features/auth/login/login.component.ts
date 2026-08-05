@@ -1,17 +1,19 @@
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../store/auth/auth.actions';
+import { selectAuthError, selectIsAuthenticated, selectIsLoading } from '../../../store/auth/auth.selectors';
+
 import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideLogIn } from '@lucide/angular';
+
 import { NzAlertComponent } from 'ng-zorro-antd/alert';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
 import { NzInputDirective, NzInputPrefixDirective, NzInputSuffixDirective, NzInputWrapperComponent } from 'ng-zorro-antd/input';
-
-import * as AuthActions from '../../../store/auth/auth.actions';
-import { selectAuthError, selectIsAuthenticated, selectIsLoading } from '../../../store/auth/auth.selectors';
 
 @Component({
   selector: 'app-login',

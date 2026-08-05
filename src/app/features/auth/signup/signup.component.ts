@@ -1,15 +1,17 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
+
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../store/auth/auth.actions';
+import { selectAuthError, selectIsLoading } from '../../../store/auth/auth.selectors';
+
 import { LucideMail, LucideLock, LucideEye, LucideEyeOff, LucideKeyRound, LucideUserPlus } from '@lucide/angular';
+
 import { NzAlertComponent } from 'ng-zorro-antd/alert';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzInputDirective, NzInputPrefixDirective, NzInputSuffixDirective, NzInputWrapperComponent } from 'ng-zorro-antd/input';
-
-import * as AuthActions from '../../../store/auth/auth.actions';
-import { selectAuthError, selectIsLoading } from '../../../store/auth/auth.selectors';
 
 @Component({
   selector: 'app-signup',
@@ -51,6 +53,10 @@ export class SignupComponent implements OnDestroy {
     { validators: this.passwordsMatch },
   );
 
+  get emailControl() { return this.form.get('email'); }
+  get passwordControl() { return this.form.get('password'); }
+  get confirmControl() { return this.form.get('confirmPassword'); }
+
   ngOnDestroy(): void {
     this.store.dispatch(AuthActions.clearAuthError());
   }
@@ -69,8 +75,4 @@ export class SignupComponent implements OnDestroy {
     const { email, password } = this.form.value;
     this.store.dispatch(AuthActions.signup({ email, password }));
   }
-
-  get emailControl() { return this.form.get('email'); }
-  get passwordControl() { return this.form.get('password'); }
-  get confirmControl() { return this.form.get('confirmPassword'); }
 }
