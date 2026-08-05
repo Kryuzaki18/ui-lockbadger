@@ -54,7 +54,13 @@
               } @else {
                 <ul class="divide-y divide-zinc-200 dark:divide-zinc-800/70">
                   @for (item of vm.recentItems; track item.id) {
-                    <li class="flex items-center gap-3 px-5 py-3.5 transition hover:bg-zinc-100 dark:hover:bg-zinc-900/70">
+                    <li
+                      class="flex cursor-pointer items-center gap-3 px-5 py-3.5 transition hover:bg-zinc-100 dark:hover:bg-zinc-900/70"
+                      role="button"
+                      tabindex="0"
+                      (click)="openInVault(item)"
+                      (keydown.enter)="openInVault(item)"
+                    >
                       <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-200 dark:bg-zinc-800 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                         {{ item.title.charAt(0) }}
                       </div>

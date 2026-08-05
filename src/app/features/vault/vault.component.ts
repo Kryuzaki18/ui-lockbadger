@@ -2,6 +2,7 @@ import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
@@ -81,6 +82,7 @@ import { selectVaultDeletingId, selectVaultEntries, selectVaultLoading } from '.
 export class VaultComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
+  private readonly route = inject(ActivatedRoute);
   private readonly modal = inject(NzModalService);
   private readonly message = inject(NzMessageService);
   private readonly destroyRef = inject(DestroyRef);
@@ -137,6 +139,11 @@ export class VaultComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(VaultActions.loadVaultEntries());
+
+    const searchParam = this.route.snapshot.queryParamMap.get('search');
+    if (searchParam) {
+      this.searchTerm = searchParam;
+    }
 
     this.actions$
       .pipe(ofType(VaultActions.deleteVaultEntrySuccess), takeUntilDestroyed(this.destroyRef))

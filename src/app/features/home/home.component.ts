@@ -1,5 +1,6 @@
 import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 import {
@@ -53,6 +54,7 @@ interface DashboardViewModel {
 })
 export class HomeComponent implements OnInit {
   private readonly store = inject(Store);
+  private readonly router = inject(Router);
 
   readonly user$ = this.store.select(selectAuthUser);
 
@@ -87,5 +89,9 @@ export class HomeComponent implements OnInit {
 
   relativeUpdatedAt(updatedAt: string): string {
     return formatRelativeTime(updatedAt);
+  }
+
+  openInVault(item: VaultEntry): void {
+    this.router.navigate(['/vault'], { queryParams: { search: item.title } });
   }
 }
