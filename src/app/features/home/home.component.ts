@@ -1,6 +1,7 @@
 import { AsyncPipe, NgClass } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { map, Observable } from 'rxjs';
 import {
   LucideExternalLink,
   LucideFingerprint,
@@ -11,10 +12,27 @@ import {
   LucideAlertTriangle,
 } from '@lucide/angular';
 
-import { selectAuthUser } from '../../store/auth/auth.selectors';
 import { HeaderComponent } from '../commons/header/header.component';
 import { SidebarComponent } from '../commons/sidebar/sidebar.component';
-import { RECENT_VAULT_ITEMS, SECURITY_TIPS, VAULT_STATS } from '../../core/constants/data.constants';
+
+import { selectAuthUser } from '../../store/auth/auth.selectors';
+import * as VaultActions from '../../store/vault/vault.actions';
+import { selectVaultEntries } from '../../store/vault/vault.selectors';
+
+import { SecurityTip, VaultEntry, VaultStat } from '../../core/types/vault.model';
+import {
+  computeRecentItems,
+  computeSecurityTips,
+  computeVaultStats,
+  formatRelativeTime,
+} from '../../core/utils/vault.util';
+
+interface DashboardViewModel {
+  stats: VaultStat[];
+  recentItems: VaultEntry[];
+  totalCount: number;
+  tips: SecurityTip[];
+}
 
 @Component({
   selector: 'app-home',
@@ -33,16 +51,25 @@ import { RECENT_VAULT_ITEMS, SECURITY_TIPS, VAULT_STATS } from '../../core/const
   ],
   templateUrl: './home.component.html',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private readonly store = inject(Store);
 
   readonly user$ = this.store.select(selectAuthUser);
 
-  readonly vaultStats = VAULT_STATS;
-  readonly recentItems = RECENT_VAULT_ITEMS;
-  readonly securityTips = SECURITY_TIPS;
+  readonly vm$: Observable<DashboardViewModel> = this.store.select(selectVaultEntries).pipe(
+    map((entries) => ({
+      stats: computeVaultStats(entries),
+      recentItems: computeRecentItems(entries),
+      totalCount: entries.length,
+      tips: computeSecurityTips(entries),
+    })),
+  );
 
   sidebarOpen = false;
+
+  ngOnInit(): void {
+    this.store.dispatch(VaultActions.loadVaultEntries());
+  }
 
   toggleSidebar(): void {
     this.sidebarOpen = !this.sidebarOpen;
@@ -56,5 +83,9 @@ export class HomeComponent {
     if (!email) return 'there';
     const local = email.split('@')[0];
     return local.charAt(0).toUpperCase() + local.slice(1);
+  }
+
+  relativeUpdatedAt(updatedAt: string): string {
+    return formatRelativeTime(updatedAt);
   }
 }

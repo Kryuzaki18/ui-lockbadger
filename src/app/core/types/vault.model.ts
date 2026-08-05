@@ -32,3 +32,20 @@ export interface VaultState {
   deletingId: string | null;
   error: string | null;
 }
+
+export type VaultStatTone = 'neutral' | 'warning' | 'danger' | 'success';
+export type VaultStatIcon = 'vault' | 'alert' | 'repeat' | 'gauge';
+
+export interface VaultStat {
+  label: string;
+  value: string;
+  hint: string;
+  icon: VaultStatIcon;
+  tone: VaultStatTone;
+}
+
+export interface SecurityTip {
+  icon: 'shield' | 'key' | 'fingerprint';
+  title: string;
+  description: string;
+}
