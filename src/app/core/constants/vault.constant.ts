@@ -1,6 +1,6 @@
 import type { VaultPasswordStrength } from '../types/vault.model';
 
-export const VAULT_CATEGORIES = ['Logins', 'Social', 'Finance', 'Work', 'Shopping'] as const;
+export const VAULT_CATEGORIES = ['Logins', 'Social', 'Finance', 'Work', 'Games', 'Shopping'] as const;
 
 export const DEFAULT_VAULT_CATEGORY = VAULT_CATEGORIES[0];
 
