@@ -205,15 +205,17 @@
                         type="button"
                         nz-button
                         nzType="text"
-                        nzSize="small"
+                        nzSize="large"
                         nzShape="circle"
-                        class="!h-7 !w-7 !shrink-0 !p-0"
+                        class="flex justify-center items-center"
                         nz-dropdown
                         [nzDropdownMenu]="rowMenu"
                         nzTrigger="click"
                         [attr.aria-label]="'More actions for ' + entry.title"
                       >
-                        <svg lucidePencil [size]="14" class="text-zinc-400" aria-hidden="true"></svg>
+                        <span>
+                          <svg lucidePencil [size]="16" class="text-zinc-400" aria-hidden="true"></svg>
+                        </span>
                       </button>
                       <nz-dropdown-menu #rowMenu="nzDropdownMenu">
                         <ul nz-menu>
